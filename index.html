@@ -1,0 +1,557 @@
+/* CODIGO ARMADO POR EL UTEPINO LEGENDARIO YAMIL, PARA CONTRATOS Y MALTRADOS COMUNICAR AL 012200*/
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generador de Recorridos UTP</title>
+<style>
+/* ── TOKENS ─────────────────────────────────────────── */
+:root {
+  --bg:        #f0f2f5;
+  --surface:   #ffffff;
+  --border:    #dde1e7;
+  --text:      #1a1d23;
+  --muted:     #6b7280;
+  --accent:    #3b5bdb;
+  --accent-h:  #2f4ac7;
+  --bus:       #1a6fc4;
+  --campus:    #2d8a4e;
+  --ate:       #c0392b;
+  --danger:    #e53e3e;
+  --warn:      #e67e22;
+
+  --c-procesos:     #b5d5f5;
+  --c-arquitectura: #aee4d4;
+  --c-gesell:       #a8d8a8;
+  --c-audiencias:   #f9d29d;
+  --c-thinking:     #f4c6a0;
+  --c-mecatronica:  #f4a7b9;
+  --c-derecho:      #d5c5e8;
+  --c-acomun:       #c8c8c8;
+  --c-soils:        #f7e79e;
+  --c-talleres:     #ffd6a5;
+  --c-unknown:      #e2e8f0;
+
+  --r: 10px;
+  --shadow: 0 2px 12px rgba(0,0,0,.08);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ── LAYOUT ─────────────────────────────────────────── */
+header { background: var(--accent); color: #fff; padding: 16px 24px; display: flex; align-items: center; gap: 12px; }
+header h1 { font-size: 18px; font-weight: 700; letter-spacing: -.3px; }
+header span { font-size: 12px; opacity: .75; }
+
+.app { display: grid; grid-template-columns: 340px 1fr; min-height: calc(100vh - 56px); }
+
+/* ── PANEL IZQUIERDO ────────────────────────────────── */
+.panel { background: var(--surface); border-right: 1px solid var(--border); padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; }
+
+.section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); margin-bottom: 8px; }
+
+/* ── FORM ELEMENTS ──────────────────────────────────── */
+label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
+input[type=text], select { width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; color: var(--text); background: var(--bg); outline: none; transition: border .15s; }
+input[type=text]:focus, select:focus { border-color: var(--accent); background: #fff; }
+input[type=number] { width: 70px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
+
+.row { display: flex; gap: 8px; align-items: flex-end; }
+.row > * { flex: 1; }
+
+/* ── BUTTONS ────────────────────────────────────────── */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 9px 16px; border-radius: 7px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: background .15s, transform .1s; white-space: nowrap; }
+.btn:active { transform: scale(.97); }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-h); }
+.btn-secondary { background: var(--bg); color: var(--text); border: 1px solid var(--border); }
+.btn-secondary:hover { background: var(--border); }
+.btn-danger { background: #fff0f0; color: var(--danger); border: 1px solid #fecaca; }
+.btn-sm { padding: 5px 10px; font-size: 11px; }
+.btn-full { width: 100%; }
+.btn-green { background: #ebf8f0; color: #2d8a4e; border: 1px solid #a7d7b8; }
+.btn-pdf { background: #e53e3e; color: #fff; }
+.btn-pdf:hover { background: #c53030; }
+
+/* ── LABS ────────────────────────────────────────────── */
+.labs-grid { display: flex; flex-direction: column; gap: 6px; max-height: 220px; overflow-y: auto; padding-right: 4px; }
+.lab-item { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 7px; border: 1.5px solid var(--border); cursor: pointer; font-size: 12px; transition: border .15s, background .15s; user-select: none; }
+.lab-item.selected { border-color: var(--accent); background: #eef2ff; }
+.lab-item .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.lab-item .lab-info { flex: 1; }
+.lab-item .lab-name { font-weight: 600; }
+.lab-item .lab-loc { font-size: 10px; color: var(--muted); }
+.lab-item .warn-badge { font-size: 9px; background: #fff3cd; color: var(--warn); padding: 1px 5px; border-radius: 4px; border: 1px solid #ffd166; }
+
+/* ── PERSONAS ───────────────────────────────────────── */
+.person-list { display: flex; flex-direction: column; gap: 6px; max-height: 240px; overflow-y: auto; padding-right: 4px; }
+.person-item { display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: var(--bg); border-radius: 7px; font-size: 12px; }
+.person-item .pname { flex: 1; font-weight: 600; }
+.badge { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 10px; font-weight: 700; }
+.badge-bus    { background: #dbeafe; color: var(--bus); }
+.badge-campus { background: #dcfce7; color: var(--campus); }
+.badge-ate    { background: #fee2e2; color: var(--ate); }
+
+/* ── OPCIONES ────────────────────────────────────────── */
+.opts-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.opt-chip { padding: 7px 14px; border-radius: 20px; border: 1.5px solid var(--border); font-size: 12px; font-weight: 600; cursor: pointer; transition: all .15s; }
+.opt-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* ── CANVAS (derecha) ────────────────────────────────── */
+.canvas { padding: 20px; overflow: auto; }
+.canvas-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 12px; color: var(--muted); }
+.canvas-empty svg { opacity: .25; }
+.canvas-empty p { font-size: 13px; }
+
+/* ── TABLE ───────────────────────────────────────────── */
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; font-size: 11px; min-width: 600px; }
+th { background: #1a1d23; color: #fff; padding: 10px 8px; font-size: 10px; font-weight: 700; white-space: nowrap; }
+td { border: 1px solid var(--border); padding: 0; vertical-align: middle; }
+td.grupo-cell { background: #f8fafc; font-weight: 700; font-size: 10.5px; padding: 8px 10px; min-width: 90px; max-width: 120px; line-height: 1.6; }
+.cell-inner { padding: 7px 6px; height: 100%; cursor: grab; }
+.cell-inner:active { cursor: grabbing; }
+.cell-code { font-weight: 700; font-size: 10px; display: block; margin-bottom: 2px; }
+.cell-name { font-size: 8px; line-height: 1.2; display: block; }
+.cell-loc   { font-size: 7px; font-weight: 600; display: block; margin-top: 2px; opacity: .6; }
+.cell-libre { background: #f1f5f9; color: #94a3b8; font-style: italic; font-size: 9px; text-align: center; padding: 12px 6px; }
+.cell-warn  { font-size: 7px; color: var(--warn); display: block; margin-top: 2px; font-weight: 700; }
+
+.dragging { opacity: .4; }
+.drag-over { outline: 2px dashed var(--accent); outline-offset: -2px; }
+
+/* ── LEGEND ──────────────────────────────────────────── */
+.legend { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; font-size: 10px; }
+.legend-item { display: flex; align-items: center; gap: 5px; }
+.legend-dot { width: 10px; height: 10px; border-radius: 3px; }
+
+/* ── TOOLBAR ─────────────────────────────────────────── */
+.toolbar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+.toolbar h2 { font-size: 14px; font-weight: 700; flex: 1; }
+
+/* ── MODAL ───────────────────────────────────────────── */
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 100; display: flex; align-items: center; justify-content: center; }
+.overlay.hidden { display: none; }
+.modal { background: #fff; border-radius: 12px; padding: 24px; width: 360px; max-width: 95vw; box-shadow: 0 8px 40px rgba(0,0,0,.2); }
+.modal h3 { font-size: 15px; font-weight: 700; margin-bottom: 16px; }
+.modal-footer { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
+.field { margin-bottom: 14px; }
+
+/* ── PRINT ───────────────────────────────────────────── */
+@media print {
+  header, .panel, .toolbar .btn, .toolbar .btn-pdf { display: none !important; }
+  .app { grid-template-columns: 1fr; }
+  .canvas { padding: 0; }
+  body { background: #fff; }
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────── */
+@media (max-width: 768px) {
+  .app { grid-template-columns: 1fr; }
+  .panel { border-right: none; border-bottom: 1px solid var(--border); }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2" fill="#fff" opacity=".9"/><rect x="13" y="3" width="8" height="8" rx="2" fill="#fff" opacity=".7"/><rect x="3" y="13" width="8" height="8" rx="2" fill="#fff" opacity=".7"/><rect x="13" y="13" width="8" height="8" rx="2" fill="#fff" opacity=".5"/></svg>
+  <div><h1>Generador de Recorridos</h1><span>UTP · Día de Integración</span></div>
+</header>
+
+<div class="app">
+
+<!-- ══ PANEL IZQUIERDO ══════════════════════════════ -->
+<div class="panel" id="panel">
+
+  <!-- LABORATORIOS -->
+  <div>
+    <div class="section-title">1 · Laboratorios disponibles</div>
+    <div class="labs-grid" id="labsGrid"></div>
+    <button class="btn btn-secondary btn-sm" style="margin-top:8px;width:100%" onclick="openAddLab()">+ Añadir nuevo salón</button>
+  </div>
+
+  <!-- PERSONAS -->
+  <div>
+    <div class="section-title">2 · Apoyos / Mentores</div>
+    <div class="row" style="margin-bottom:8px">
+      <div>
+        <label>Nombre</label>
+        <input type="text" id="personName" placeholder="Nombre" onkeydown="if(event.key==='Enter')addPerson()">
+      </div>
+      <div style="max-width:100px">
+        <label>Tipo</label>
+        <select id="personType">
+          <option value="BUS">BUS</option>
+          <option value="CAMPUS">CAMPUS</option>
+          <option value="EXTERNO">EXTERNO</option>
+        </select>
+      </div>
+      <div style="max-width:60px;align-self:flex-end">
+        <button class="btn btn-primary btn-sm" onclick="addPerson()">+</button>
+      </div>
+    </div>
+    <div class="person-list" id="personList"></div>
+  </div>
+
+  <!-- CONFIGURACIÓN -->
+  <div>
+    <div class="section-title">3 · Configuración del recorrido</div>
+    <div class="field">
+      <label>Tamaño de grupo</label>
+      <div class="opts-row" id="groupSize">
+        <div class="opt-chip active" onclick="setGroupSize(1,this)">Individual</div>
+        <div class="opt-chip" onclick="setGroupSize(2,this)">Parejas</div>
+        <div class="opt-chip" onclick="setGroupSize(3,this)">Tríos</div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Restricciones de grupos</label>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px">
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:400;color:var(--text)">
+          <input type="checkbox" id="noBusBus" checked> BUS no van juntos
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:400;color:var(--text)">
+          <input type="checkbox" id="noAteAte" checked> EXTERNO no van juntos
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:400;color:var(--text)">
+          <input type="checkbox" id="noSolo"> Nadie va solo (si es posible)
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- GENERAR -->
+  <button class="btn btn-primary btn-full" onclick="generate()" style="margin-top:auto">
+    <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M4 4l16 8-16 8V4z" fill="#fff"/></svg>
+    Generar recorrido
+  </button>
+
+</div>
+
+<!-- ══ CANVAS ════════════════════════════════════════ -->
+<div class="canvas" id="canvas">
+  <div class="canvas-empty" id="emptyState">
+    <svg width="64" height="64" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="#94a3b8" stroke-width="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="#94a3b8" stroke-width="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke="#94a3b8" stroke-width="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke="#94a3b8" stroke-width="1.5"/></svg>
+    <p>Selecciona laboratorios, añade apoyos<br>y pulsa <strong>Generar recorrido</strong></p>
+  </div>
+  <div id="resultArea" style="display:none">
+    <div class="toolbar">
+      <h2 id="resultTitle">Recorrido</h2>
+      <button class="btn btn-secondary btn-sm" onclick="generate()">↺ Regenerar</button>
+      <button class="btn btn-pdf btn-sm" onclick="printPDF()">⬇ Imprimir PDF</button>
+    </div>
+    <div class="table-wrap" id="tableWrap"></div>
+    <div class="legend" id="legendWrap"></div>
+    <p style="font-size:10px;color:var(--muted);margin-top:10px">💡 Arrastra las celdas para intercambiar salones entre grupos y rondas.</p>
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<!-- ══ MODAL AÑADIR LABORATORIO ══════════════════════ -->
+<div class="overlay hidden" id="addLabOverlay">
+  <div class="modal">
+    <h3>Añadir nuevo salón</h3>
+    <div class="field">
+      <label>Nombre del salón / laboratorio</label>
+      <input type="text" id="newLabName" placeholder="Ej: Sala de Reuniones">
+    </div>
+    <div class="field">
+      <label>Torre</label>
+      <select id="newLabTower">
+        <option value="A">Torre A</option>
+        <option value="B">Torre B</option>
+        <option value="">Sin confirmar</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Piso (dejar vacío si no se sabe)</label>
+      <input type="text" id="newLabFloor" placeholder="Ej: 3 · Piso 3">
+    </div>
+    <div class="field">
+      <label style="display:flex;align-items:center;gap:8px;font-weight:400;font-size:13px;color:var(--text)">
+        <input type="checkbox" id="newLabPending"> Ambiente pendiente de confirmar
+      </label>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeAddLab()">Cancelar</button>
+      <button class="btn btn-primary" onclick="confirmAddLab()">Añadir</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══ DATOS ══════════════════════════════════════════════ */
+const LABS_DEFAULT = [
+  { id:'a0110',  name:'Lab. Procesos Industriales',       code:'A0110',      tower:'A', floor:'Piso 1', color:'#b5d5f5', pending:false },
+  { id:'a0211',  name:'Arquitectura de Computadoras',     code:'A0211',      tower:'A', floor:'Piso 2', color:'#aee4d4', pending:false },
+  { id:'a0613',  name:'Sala Gesell',                      code:'A0613',      tower:'A', floor:'Piso 6', color:'#a8d8a8', pending:false },
+  { id:'b0307',  name:'Sala de Audiencias',               code:'B0307',      tower:'B', floor:'Piso 3', color:'#f9d29d', pending:false },
+  { id:'b0610',  name:'Sala de Audiencias',               code:'B0610',      tower:'B', floor:'Piso 6', color:'#f9c784', pending:false },
+  { id:'b303',   name:'Design Thinking – Administración', code:'B303',       tower:'B', floor:'Piso 3', color:'#f4c6a0', pending:false },
+  { id:'bss04',  name:'Lab. Mecatrónica, Robótica y CNC', code:'BSS04',      tower:'B', floor:'Sótano', color:'#f4a7b9', pending:false },
+  { id:'derecho',name:'Laboratorio de Derecho',           code:'Derecho',    tower:'B', floor:'?',      color:'#d5c5e8', pending:true  },
+  { id:'acomun', name:'Área Común',                       code:'Área Común', tower:'A/B',floor:'—',    color:'#c8c8c8', pending:false },
+  { id:'msuelos',name:'Mecánica de Suelos',               code:'Mec.Suelos', tower:'B', floor:'Semisótano', color:'#f7e79e', pending:false },
+  { id:'talleres',name:'Zona de Talleres Azotea',         code:'Talleres',   tower:'A/B',floor:'Azotea', color:'#ffd6a5', pending:false },
+];
+
+let labs      = LABS_DEFAULT.map(l=>({...l, selected:false}));
+let persons   = [];
+let groupSize = 2;
+let schedule  = [];  // [ [grupo, ronda] ] = labId | 'LIBRE'
+
+/* ══ RENDER LABS ════════════════════════════════════════ */
+function renderLabs(){
+  const g = document.getElementById('labsGrid');
+  g.innerHTML = labs.map((l,i)=>`
+    <div class="lab-item ${l.selected?'selected':''}" onclick="toggleLab(${i})">
+      <div class="dot" style="background:${l.color}"></div>
+      <div class="lab-info">
+        <div class="lab-name">${l.code} · ${l.name}</div>
+        <div class="lab-loc">Torre ${l.tower} · ${l.floor} ${l.pending?'<span class="warn-badge">⚠ pendiente</span>':''}</div>
+      </div>
+    </div>`).join('');
+}
+function toggleLab(i){ labs[i].selected=!labs[i].selected; renderLabs(); }
+
+/* ══ RENDER PERSONS ═════════════════════════════════════ */
+function renderPersons(){
+  const list = document.getElementById('personList');
+  list.innerHTML = persons.map((p,i)=>`
+    <div class="person-item">
+      <span class="pname">${p.name}</span>
+      <span class="badge badge-${p.type.toLowerCase()}">${p.type}</span>
+      <button class="btn btn-danger btn-sm" onclick="removePerson(${i})">✕</button>
+    </div>`).join('');
+}
+function addPerson(){
+  const n=document.getElementById('personName').value.trim();
+  const t=document.getElementById('personType').value;
+  if(!n)return;
+  persons.push({name:n,type:t});
+  document.getElementById('personName').value='';
+  renderPersons();
+}
+function removePerson(i){ persons.splice(i,1); renderPersons(); }
+
+/* ══ GROUP SIZE ═════════════════════════════════════════ */
+function setGroupSize(n,el){
+  groupSize=n;
+  document.querySelectorAll('#groupSize .opt-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+/* ══ ADD LAB MODAL ══════════════════════════════════════ */
+function openAddLab(){ document.getElementById('addLabOverlay').classList.remove('hidden'); }
+function closeAddLab(){ document.getElementById('addLabOverlay').classList.add('hidden'); }
+function confirmAddLab(){
+  const name   = document.getElementById('newLabName').value.trim();
+  const tower  = document.getElementById('newLabTower').value;
+  const floor  = document.getElementById('newLabFloor').value.trim() || '?';
+  const pending= document.getElementById('newLabPending').checked;
+  if(!name)return;
+  const id='custom_'+Date.now();
+  labs.push({ id, name, code:name, tower:tower||'?', floor, color:'#e2e8f0', pending, selected:true });
+  document.getElementById('newLabName').value='';
+  document.getElementById('newLabFloor').value='';
+  document.getElementById('newLabPending').checked=false;
+  renderLabs();
+  closeAddLab();
+}
+
+/* ══ GROUP BUILDER ══════════════════════════════════════ */
+function buildGroups(){
+  const noBusBus = document.getElementById('noBusBus').checked;
+  const noAteAte = document.getElementById('noAteAte').checked;
+  const noSolo   = document.getElementById('noSolo').checked;
+
+  // shuffle persons
+  let pool = [...persons].sort(()=>Math.random()-.5);
+  const groups = [];
+
+  if(groupSize===1){
+    pool.forEach(p=>groups.push([p]));
+    return groups;
+  }
+
+  // try to pair respecting restrictions
+  const used = new Array(pool.length).fill(false);
+
+  for(let i=0;i<pool.length;i++){
+    if(used[i]) continue;
+    if(groupSize===2){
+      let paired=false;
+      for(let j=i+1;j<pool.length;j++){
+        if(used[j]) continue;
+        const a=pool[i], b=pool[j];
+        if(noBusBus && a.type==='BUS' && b.type==='BUS') continue;
+        if(noAteAte && a.type==='EXTERNO' && b.type==='EXTERNO') continue;
+        groups.push([a,b]); used[i]=used[j]=true; paired=true; break;
+      }
+      if(!paired){ groups.push([pool[i]]); used[i]=true; }
+    } else {
+      // trios
+      let members=[pool[i]]; used[i]=true;
+      for(let j=i+1;j<pool.length&&members.length<3;j++){
+        if(used[j]) continue;
+        const b=pool[j];
+        const hasBus=members.some(m=>m.type==='BUS');
+        const hasAte=members.some(m=>m.type==='EXTERNO');
+        if(noBusBus && b.type==='BUS' && hasBus) continue;
+        if(noAteAte && b.type==='EXTERNO' && hasAte) continue;
+        members.push(b); used[j]=true;
+      }
+      groups.push(members);
+    }
+  }
+  return groups;
+}
+
+/* ══ ROUND-ROBIN SCHEDULE ═══════════════════════════════ */
+function buildSchedule(groups, selectedLabs){
+  const G = groups.length;
+  const L = selectedLabs.length;
+  // slots = labs + LIBRE slots so each group gets one per round
+  const totalSlots = Math.max(G, L);
+  // pad labs with LIBRE
+  const slots = [...selectedLabs.map(l=>l.id)];
+  while(slots.length < G) slots.push('LIBRE');
+
+  // nRounds = slots.length (= max(G,L))
+  const nRounds = slots.length;
+  const sched = []; // sched[g][r] = labId | 'LIBRE'
+  for(let g=0;g<G;g++){
+    sched[g]=[];
+    for(let r=0;r<nRounds;r++){
+      sched[g][r] = slots[(g+r)%nRounds];
+    }
+  }
+  return { sched, nRounds };
+}
+
+/* ══ GENERACDOR OWO ═══════════════════════════════════════════ */
+function generate(){
+  const selLabs = labs.filter(l=>l.selected);
+  if(selLabs.length===0){ alert('Selecciona al menos un laboratorio.'); return; }
+  if(persons.length===0){ alert('Añade al menos un apoyo/mentor.'); return; }
+
+  const groups = buildGroups();
+  const { sched, nRounds } = buildSchedule(groups, selLabs);
+
+  schedule = sched;
+  renderTable(groups, selLabs, sched, nRounds);
+
+  document.getElementById('emptyState').style.display='none';
+  document.getElementById('resultArea').style.display='block';
+  document.getElementById('resultTitle').textContent=
+    `Recorrido · ${groups.length} grupos · ${selLabs.length} salones`;
+}
+
+/* ══ RENDER TABLE ═══════════════════════════════════════ */
+function renderTable(groups, selLabs, sched, nRounds){
+  const labMap = {};
+  labs.forEach(l=>labMap[l.id]=l);
+
+  // header
+  let html=`<table id="schedTable"><thead><tr><th>Grupo / Apoyo</th>`;
+  for(let r=0;r<nRounds;r++) html+=`<th>Ronda ${r+1}</th>`;
+  html+=`</tr></thead><tbody>`;
+
+  groups.forEach((grp,g)=>{
+    const names = grp.map(p=>`${p.name} <span class="badge badge-${p.type.toLowerCase()}">${p.type}</span>`).join('<br>');
+    html+=`<tr><td class="grupo-cell">${names}</td>`;
+    for(let r=0;r<nRounds;r++){
+      const lid=sched[g][r];
+      if(lid==='LIBRE'){
+        html+=`<td><div class="cell-libre" draggable="true" data-g="${g}" data-r="${r}">— libre —</div></td>`;
+      } else {
+        const lab=labMap[lid];
+        html+=`<td style="background:${lab.color}20">
+          <div class="cell-inner" draggable="true" data-g="${g}" data-r="${r}"
+               style="background:${lab.color}">
+            <span class="cell-code">${lab.code}</span>
+            <span class="cell-name">${lab.name}</span>
+            <span class="cell-loc">Torre ${lab.tower} · ${lab.floor}</span>
+            ${lab.pending?'<span class="cell-warn">⚠ por confirmar</span>':''}
+          </div></td>`;
+      }
+    }
+    html+=`</tr>`;
+  });
+  html+=`</tbody></table>`;
+
+  document.getElementById('tableWrap').innerHTML=html;
+
+  // legend
+  const seen=new Set();
+  let leg='';
+  selLabs.forEach(l=>{
+    if(!seen.has(l.id)){
+      seen.add(l.id);
+      leg+=`<div class="legend-item"><div class="legend-dot" style="background:${l.color}"></div>${l.code} · ${l.name}</div>`;
+    }
+  });
+  document.getElementById('legendWrap').innerHTML=leg;
+
+  initDrag(sched, groups, selLabs);
+}
+
+/* ══ DRAG & DROP ════════════════════════════════════════ */
+function initDrag(sched, groups, selLabs){
+  let dragG=null, dragR=null;
+
+  document.querySelectorAll('[draggable]').forEach(el=>{
+    el.addEventListener('dragstart',e=>{
+      dragG=+el.dataset.g; dragR=+el.dataset.r;
+      el.classList.add('dragging');
+    });
+    el.addEventListener('dragend',e=>{ el.classList.remove('dragging'); });
+    el.addEventListener('dragover',e=>{ e.preventDefault(); el.classList.add('drag-over'); });
+    el.addEventListener('dragleave',e=>{ el.classList.remove('drag-over'); });
+    el.addEventListener('drop',e=>{
+      e.preventDefault(); el.classList.remove('drag-over');
+      const tG=+el.dataset.g, tR=+el.dataset.r;
+      if(dragG===null||dragG===tG&&dragR===tR) return;
+      // swap
+      const tmp=sched[dragG][dragR];
+      sched[dragG][dragR]=sched[tG][tR];
+      sched[tG][tR]=tmp;
+      renderTable(groups,selLabs,sched,sched[0].length);
+      dragG=dragR=null;
+    });
+
+    // touch swap
+    let touchSrc=null;
+    el.addEventListener('touchstart',e=>{ touchSrc={g:+el.dataset.g,r:+el.dataset.r}; el.style.opacity='.5'; },{passive:true});
+    el.addEventListener('touchend',e=>{
+      el.style.opacity='';
+      const t=e.changedTouches[0];
+      const target=document.elementFromPoint(t.clientX,t.clientY);
+      const dest=target?.closest('[draggable]');
+      if(!dest||!touchSrc) return;
+      const tG=+dest.dataset.g,tR=+dest.dataset.r;
+      if(touchSrc.g===tG&&touchSrc.r===tR) return;
+      const tmp=sched[touchSrc.g][touchSrc.r];
+      sched[touchSrc.g][touchSrc.r]=sched[tG][tR];
+      sched[tG][tR]=tmp;
+      renderTable(groups,selLabs,sched,sched[0].length);
+      touchSrc=null;
+    },{passive:true});
+  });
+}
+
+/* ══ PDF ════════════════════════════════════════════════ */
+function printPDF(){
+  window.print();
+}
+
+/* ══ INIT ═══════════════════════════════════════════════ */
+renderLabs();
+renderPersons();
+</script>
+</body>
+</html>
