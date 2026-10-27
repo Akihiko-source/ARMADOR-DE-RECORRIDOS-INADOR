@@ -2,578 +2,338 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Generador de Recorridos UTP</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>APP Apoyo Día UTP</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Alegreya+Sans:wght@400;500;700&display=swap">
 <style>
-:root {
-  --bg:#f0f2f5; --surface:#fff; --border:#dde1e7; --text:#1a1d23; --muted:#6b7280;
-  --accent:#3b5bdb; --accent-h:#2f4ac7;
-  --bus:#1a6fc4; --campus:#2d8a4e; --externo:#c0392b;
-  --danger:#e53e3e; --warn:#e67e22;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
-header{background:var(--accent);color:#fff;padding:14px 20px;display:flex;align-items:center;gap:12px;}
-header h1{font-size:17px;font-weight:700;}
-header span{font-size:11px;opacity:.75;}
-.app{display:grid;grid-template-columns:340px 1fr;min-height:calc(100vh - 52px);}
-.panel{background:var(--surface);border-right:1px solid var(--border);padding:16px;overflow-y:auto;display:flex;flex-direction:column;gap:16px;}
-.section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:6px;}
-label{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-bottom:3px;}
-input[type=text],select{width:100%;padding:7px 9px;border:1px solid var(--border);border-radius:6px;font-size:12px;color:var(--text);background:var(--bg);outline:none;transition:border .15s;}
-input[type=text]:focus,select:focus{border-color:var(--accent);background:#fff;}
-.row{display:flex;gap:6px;align-items:flex-end;}
-.row>*{flex:1;}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:8px 14px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:background .15s,transform .1s;white-space:nowrap;}
-.btn:active{transform:scale(.97);}
-.btn-primary{background:var(--accent);color:#fff;}
-.btn-primary:hover{background:var(--accent-h);}
-.btn-secondary{background:var(--bg);color:var(--text);border:1px solid var(--border);}
-.btn-secondary:hover{background:var(--border);}
-.btn-danger{background:#fff0f0;color:var(--danger);border:1px solid #fecaca;}
-.btn-sm{padding:4px 9px;font-size:11px;}
-.btn-full{width:100%;}
-.btn-pdf{background:#e53e3e;color:#fff;}
-.btn-pdf:hover{background:#c53030;}
-
-/* LABS */
-.labs-grid{display:flex;flex-direction:column;gap:5px;max-height:200px;overflow-y:auto;padding-right:2px;}
-.lab-item{display:flex;align-items:center;gap:7px;padding:6px 9px;border-radius:7px;border:1.5px solid var(--border);cursor:pointer;font-size:11px;transition:border .15s,background .15s;user-select:none;}
-.lab-item.selected{border-color:var(--accent);background:#eef2ff;}
-.lab-item .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
-.lab-item .lab-info{flex:1;}
-.lab-item .lab-name{font-weight:600;}
-.lab-item .lab-loc{font-size:9px;color:var(--muted);}
-.warn-badge{font-size:9px;background:#fff3cd;color:var(--warn);padding:1px 4px;border-radius:3px;border:1px solid #ffd166;}
-
-/* PERSONAS */
-.person-list{display:flex;flex-direction:column;gap:5px;max-height:200px;overflow-y:auto;padding-right:2px;}
-.person-item{display:flex;align-items:center;gap:7px;padding:6px 9px;background:var(--bg);border-radius:7px;font-size:11px;cursor:grab;border:1.5px solid transparent;transition:border .15s;}
-.person-item:active{cursor:grabbing;}
-.person-item.p-dragging{opacity:.4;border:1.5px dashed var(--accent);}
-.person-item.p-drag-over{border:1.5px dashed var(--accent);background:#eef2ff;}
-.person-item .pname{flex:1;font-weight:600;}
-.badge{display:inline-block;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:700;}
-.badge-bus{background:#dbeafe;color:var(--bus);}
-.badge-campus{background:#dcfce7;color:var(--campus);}
-.badge-externo{background:#fee2e2;color:var(--externo);}
-
-/* CHIPS */
-.opts-row{display:flex;gap:6px;flex-wrap:wrap;}
-.opt-chip{padding:6px 12px;border-radius:20px;border:1.5px solid var(--border);font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;}
-.opt-chip.active{background:var(--accent);color:#fff;border-color:var(--accent);}
-
-/* CANVAS */
-.canvas{padding:18px;overflow:auto;}
-.canvas-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;color:var(--muted);}
-.canvas-empty p{font-size:13px;text-align:center;}
-
-/* TABLE */
-.table-wrap{overflow-x:auto;}
-table{border-collapse:collapse;font-size:11px;min-width:600px;}
-th{background:#1a1d23;color:#fff;padding:9px 7px;font-size:10px;font-weight:700;white-space:nowrap;}
-td{border:1px solid var(--border);padding:0;vertical-align:middle;}
-td.grupo-cell{background:#f8fafc;font-weight:700;font-size:10px;padding:7px 9px;min-width:90px;max-width:130px;line-height:1.6;}
-.cell-inner{padding:6px 5px;height:100%;cursor:grab;}
-.cell-inner:active{cursor:grabbing;}
-.cell-code{font-weight:700;font-size:10px;display:block;margin-bottom:1px;}
-.cell-name{font-size:8px;line-height:1.2;display:block;}
-.cell-loc{font-size:7px;font-weight:600;display:block;margin-top:2px;opacity:.6;}
-.cell-libre{background:#f1f5f9;color:#94a3b8;font-style:italic;font-size:9px;text-align:center;padding:10px 5px;cursor:grab;}
-.cell-warn{font-size:7px;color:var(--warn);display:block;margin-top:2px;font-weight:700;}
-.dragging{opacity:.4;}
-.drag-over{outline:2px dashed var(--accent);outline-offset:-2px;}
-
-/* LEGEND */
-.legend{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px;font-size:10px;}
-.legend-item{display:flex;align-items:center;gap:4px;}
-.legend-dot{width:10px;height:10px;border-radius:3px;}
-
-/* TOOLBAR */
-.toolbar{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
-.toolbar h2{font-size:13px;font-weight:700;flex:1;}
-
-/* MODAL */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;display:flex;align-items:center;justify-content:center;}
-.overlay.hidden{display:none;}
-.modal{background:#fff;border-radius:12px;padding:22px;width:360px;max-width:95vw;box-shadow:0 8px 40px rgba(0,0,0,.2);}
-.modal h3{font-size:14px;font-weight:700;margin-bottom:14px;}
-.modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;}
-.field{margin-bottom:12px;}
-
-/* INFO BOX */
-.info-box{background:#eef2ff;border:1px solid #c7d2fe;border-radius:7px;padding:8px 10px;font-size:10px;color:#3b5bdb;line-height:1.5;}
-
-@media print{
-  header,.panel,.toolbar .btn{display:none!important;}
-  .app{grid-template-columns:1fr;}
-  .canvas{padding:0;}
-  body{background:#fff;}
-}
-@media(max-width:768px){
-  .app{grid-template-columns:1fr;}
-  .panel{border-right:none;border-bottom:1px solid var(--border);}
-}
+:root{color-scheme:dark;--bg:#0a0808;--stone:#1d1718;--stone2:#2a2122;--ink:#f3eee4;--muted:#a79d8f;--red:#c8161d;--red-d:#6e0b10;--bronze:#8c6d3f;--bronze-l:#c9a35f;--line:#4a3a2c;--bus:#2a7fd4;--campus:#2f9e5b;--ext:#d03a30;
+ --hd:'Cinzel','Trajan Pro','Times New Roman',serif;--bd:'Alegreya Sans','Segoe UI',system-ui,sans-serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{font-family:var(--bd);font-size:15px;color:var(--ink);min-height:100vh;background:radial-gradient(ellipse at top,#2a1112 0,#0a0808 60%) fixed,var(--bg)}
+body.dragging-now{user-select:none;-webkit-user-select:none;cursor:grabbing}
+header{display:flex;align-items:center;gap:14px;padding:14px 20px;background:linear-gradient(#000,#190b0c);border-bottom:3px solid var(--bronze);box-shadow:0 4px 0 #000,0 6px 22px rgba(200,22,29,.35)}
+.shield{width:46px;height:54px;background:linear-gradient(160deg,#e02229,#6e0b10);clip-path:polygon(0 0,100% 0,100% 62%,50% 100%,0 62%);display:grid;place-items:center;font:900 14px var(--hd);padding-bottom:8px;color:#fff;filter:drop-shadow(0 0 6px #c8161d)}
+header h1{font:900 22px var(--hd);letter-spacing:2px;text-transform:uppercase;text-shadow:0 2px 0 #000,0 0 14px rgba(200,22,29,.7)}header h1 b{color:var(--red)}
+header small{font:500 11px var(--hd);letter-spacing:3px;color:var(--bronze-l);text-transform:uppercase}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;gap:6px;padding:8px 12px;overflow-x:auto;background:#0d0a0a;border-bottom:2px solid #000;box-shadow:0 2px 0 var(--line)}
+nav button,.sub button{flex:1;min-width:max-content;padding:11px 18px;font:700 12px var(--hd);letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);background:linear-gradient(#2d2425,#171213);border:2px solid var(--line);border-radius:3px;cursor:pointer;box-shadow:inset 0 1px 0 #ffffff14,0 2px 0 #000}
+nav button.on,.sub button.on{color:#fff;background:linear-gradient(#d4191f,#6e0b10);border-color:var(--bronze-l);box-shadow:inset 0 1px 0 #ffffff40,0 0 14px rgba(200,22,29,.6)}
+.sub{display:flex;gap:6px;margin-bottom:14px}.sub button{padding:9px 14px}
+.tab,.stab{display:none}.tab.on,.stab.on{display:block}
+.app{display:grid;grid-template-columns:360px 1fr;align-items:start}
+.panel{padding:14px;display:flex;flex-direction:column;gap:14px}
+.card{position:relative;background:linear-gradient(#2a2122,#171213);border:2px solid var(--bronze);border-radius:4px;padding:16px;box-shadow:0 0 0 2px #000,inset 0 0 0 1px #000,inset 0 0 30px rgba(0,0,0,.65),0 6px 18px rgba(0,0,0,.5)}
+.card::before,.card::after{content:"";position:absolute;width:10px;height:10px;background:var(--bronze-l);transform:rotate(45deg);top:-7px;left:-7px;box-shadow:0 0 0 2px #000}
+.card::after{left:auto;right:-7px;top:auto;bottom:-7px}
+.st{font:700 13px var(--hd);letter-spacing:1.5px;text-transform:uppercase;color:var(--bronze-l);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid;border-image:linear-gradient(90deg,var(--red),transparent) 1}
+label{display:block;font:700 11px var(--hd);letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+input[type=text],input[type=date],input[type=tel],select{width:100%;padding:11px 12px;font:16px var(--bd);color:var(--ink);background:#0d0a0a;border:2px solid var(--line);border-radius:3px;outline:none;box-shadow:inset 0 2px 6px #000}
+input:focus,select:focus{border-color:var(--red);box-shadow:inset 0 2px 6px #000,0 0 10px rgba(200,22,29,.5)}
+input[type=date]{color-scheme:dark}
+.row{display:flex;gap:8px;align-items:flex-end}.row>*{flex:1}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 16px;font:700 12px var(--hd);letter-spacing:1.2px;text-transform:uppercase;border-radius:3px;cursor:pointer;color:var(--ink);text-decoration:none;border:2px solid var(--bronze);background:linear-gradient(#3a2e2f,#1b1516);box-shadow:inset 0 1px 0 #ffffff1c,0 2px 0 #000}
+.btn:active{transform:translateY(1px)}.btn:hover{filter:brightness(1.2)}
+.btn-p{background:linear-gradient(#d4191f,#6e0b10);border-color:var(--bronze-l);color:#fff;text-shadow:0 1px 0 #000}
+.btn-sm{padding:7px 11px;font-size:11px}.btn-full{width:100%;padding:15px;font-size:14px}
+.btn[aria-disabled=true]{opacity:.4;pointer-events:none}
+.labs,.plist{display:flex;flex-direction:column;gap:6px;max-height:240px;overflow-y:auto}
+.lab,.pitem{display:flex;align-items:center;gap:10px;padding:9px 11px;border:2px solid var(--line);border-radius:3px;background:#120d0e;font-size:14px;user-select:none}
+.lab{cursor:pointer}.lab.sel{border-color:var(--red);background:#2a0c0e;box-shadow:0 0 10px rgba(200,22,29,.45)}
+.lab .dot{width:12px;height:12px;border-radius:2px;flex-shrink:0;border:1px solid #000;transform:rotate(45deg)}
+.lab b{display:block;font-weight:700}.lab small{color:var(--muted);font-size:12px}
+.pitem .n{flex:1;font-weight:700}
+.badge{display:inline-block;padding:2px 7px;border-radius:2px;font:700 9px var(--hd);letter-spacing:1px;color:#fff}
+.b-bus{background:var(--bus)}.b-campus{background:var(--campus)}.b-externo{background:var(--ext)}
+.x{border:0;background:transparent;color:var(--red);font:700 18px var(--bd);cursor:pointer;padding:0 6px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{padding:8px 12px;border:2px solid var(--line);border-radius:3px;font:700 11px var(--hd);letter-spacing:1px;text-transform:uppercase;cursor:pointer;background:#120d0e;user-select:none}
+.chip.on{background:linear-gradient(#d4191f,#6e0b10);border-color:var(--bronze-l);color:#fff}
+.ck{display:flex;align-items:center;gap:10px;font:500 15px var(--bd);margin:8px 0;text-transform:none;letter-spacing:0;color:var(--ink)}.ck input{width:19px;height:19px;accent-color:var(--red)}
+.info{border:1px solid var(--line);border-left:4px solid var(--red);background:#120d0e;padding:10px 12px;font-size:14px;line-height:1.45}
+.canvas{padding:14px 14px 50px;min-width:0}
+.empty{text-align:center;color:var(--muted);padding:70px 20px;font:500 14px var(--hd);letter-spacing:1px;line-height:2}
+.tb{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center}.tb h2,.tb h3{font:700 16px var(--hd);letter-spacing:1.5px;flex:1;min-width:150px;text-transform:uppercase;color:var(--bronze-l)}
+.tw{overflow-x:auto;border:2px solid var(--bronze);border-radius:3px;background:#120d0e;box-shadow:0 0 0 2px #000}
+table{border-collapse:collapse;font-size:12px;width:100%}
+th{background:linear-gradient(#8d1015,#4a080b);color:#fff;padding:11px 8px;font:700 11px var(--hd);letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap;border:1px solid #000}
+td{border:1px solid #000;padding:0;vertical-align:middle}
+td.gc{min-width:155px;padding:6px;background:#1d1718}
+.pchip{display:flex;align-items:center;gap:7px;padding:8px;margin:3px 0;background:#2a2122;border:2px solid var(--line);border-radius:3px;font-weight:700;font-size:13px}
+.grip{width:10px;height:14px;flex:none;color:var(--muted);background:radial-gradient(circle,currentColor 1.3px,transparent 1.7px) 0 0/5px 5px}
+.ci{padding:10px 8px;min-width:112px;color:#1a1a1a}.ci b{display:block;font-size:13px}.ci span{display:block;font-size:11px;line-height:1.25}.ci em{display:block;font-size:10px;font-weight:700;opacity:.65;margin-top:3px;font-style:normal}
+.cl{padding:16px 8px;text-align:center;color:var(--muted);font-style:italic;background:#120d0e}
+.dg{cursor:grab;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.lifted{opacity:.25}
+.hot{outline:3px dashed var(--red);outline-offset:-3px;filter:brightness(1.3)}
+.ghost{position:fixed;z-index:9999;pointer-events:none;margin:0;transform:scale(1.07) rotate(2.5deg);box-shadow:0 16px 34px rgba(0,0,0,.7),0 0 18px rgba(200,22,29,.6);border-radius:4px;opacity:.97}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;font-size:13px}.legend div{display:flex;align-items:center;gap:6px}.legend i{width:11px;height:11px;display:block;transform:rotate(45deg);border:1px solid #000}
+.hint{font-size:13px;color:var(--muted);margin-top:8px}
+.sect{margin-top:30px}
+.mini{border:1px solid var(--bronze);background:#1d1718;color:var(--ink);border-radius:2px;font:700 10px var(--hd);letter-spacing:.8px;padding:5px 8px;cursor:pointer;margin:2px;text-transform:uppercase}
+.mini:hover{border-color:var(--red);color:#fff;background:var(--red-d)}
+.talk{display:inline-block;background:var(--red);color:#fff;font:700 9px var(--hd);letter-spacing:.8px;padding:3px 7px;margin:3px 4px 0 0;border:1px solid #000}.talk.k{background:#000;border-color:var(--bronze-l)}
+.rt td,.rt th{padding:9px 11px}.rt td{font-size:14px}.rt td.g{font:900 18px var(--hd);text-align:center;background:#1d1718;color:var(--bronze-l)}
+.wrap{max-width:1100px;margin:0 auto;padding:16px 14px 50px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.fld{margin-bottom:13px}
+#sigc{width:100%;height:180px;border:3px double var(--bronze-l);border-radius:3px;background:#fff;touch-action:none;display:block}
+#djPrev{overflow:hidden}#djInner{transform-origin:0 0;width:816px}
+.pgw{margin-bottom:16px;box-shadow:0 6px 24px rgba(0,0,0,.7);width:816px}
+.res{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:14px;border:2px solid var(--line);border-radius:3px;background:linear-gradient(#241c1d,#150f10);margin-bottom:10px}
+.res.pend{opacity:.6}.res .rt2{flex:1;min-width:180px}.res b{display:block;font:700 14px var(--hd);letter-spacing:1px;text-transform:uppercase}.res small{color:var(--muted);font-size:12px;word-break:break-all}
+.res .tag{font:700 10px var(--hd);letter-spacing:1px;color:var(--bronze-l);text-transform:uppercase}
+.res .pv{width:100%}.res video{width:100%;max-height:60vh;background:#000;border:2px solid var(--bronze);margin-top:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#000;color:#fff;padding:12px 20px;font:700 12px var(--hd);letter-spacing:1px;z-index:10000;border:2px solid var(--red);max-width:90vw;text-align:center}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:grid;place-items:center;padding:16px}.ov.h{display:none}
+.modal{background:linear-gradient(#2a2122,#171213);border:2px solid var(--bronze);padding:20px;width:380px;max-width:100%;box-shadow:0 0 0 2px #000}.modal h3{font:700 15px var(--hd);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;color:var(--bronze-l)}.mf{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+/* Cartilla */
+.cart{background:#fbfaf6;color:#1a1a1a;font:13px/1.55 'Alegreya Sans','Segoe UI',sans-serif;padding:26px;margin-bottom:16px;border:2px solid var(--bronze)}
+.cart .top{text-align:center;position:relative}.cart .top small{font:700 11px var(--hd);letter-spacing:2px;color:#777}.cart .top h2{font:900 38px/1.1 var(--hd);color:#a6122a;letter-spacing:1px;margin:2px 0}.cart .top span{font-size:12px;color:#666}
+.cart .cara{position:absolute;right:0;top:0;background:#1a1a1a;color:#fff;font:700 10px var(--hd);padding:5px 10px;border-radius:5px}
+.cart hr{border:0;border-top:2px solid #1a1a1a;margin:12px 0}
+.cart .cols{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start}
+.cart h4{font:900 15px var(--hd);text-transform:uppercase;margin:16px 0 8px;padding-bottom:5px;border-bottom:1px dotted #bbb}.cart h4 i{font-style:normal;color:#a6122a}.cart .cols>div>h4:first-child{margin-top:4px}
+.cart p{margin:0 0 9px}.cart ul{margin:0 0 9px;padding-left:18px}.cart li{margin-bottom:3px}.cart .e{color:#777;font-style:italic}.cart .r{color:#a6122a;font-weight:700}
+.cart .foot{text-align:center;color:#a6122a;font-weight:700;font-size:13px}
+.cart.fix{width:816px;height:1054px;margin:0;border:0;padding:40px 56px;font-size:12px}
+@media(max-width:820px){.app{grid-template-columns:1fr}.grid2,.cart:not(.fix) .cols{grid-template-columns:1fr}header h1{font-size:17px}.cart:not(.fix) .cara{position:static;display:inline-block;margin-bottom:6px}.cart:not(.fix) .top h2{font-size:28px}}
 </style>
 </head>
 <body>
+<header><div class="shield">UTP</div><div><h1>APP <b>Apoyo</b> Día UTP</h1><small>Recorridos · Roles · Declaración Jurada · Recursos</small></div></header>
+<nav><button class="on" data-tab="rec">Recorrido</button><button data-tab="dj">Declaración Jurada</button><button data-tab="res">Recursos</button></nav>
 
-<header>
-  <svg width="22" height="22" fill="none" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2" fill="#fff" opacity=".9"/><rect x="13" y="3" width="8" height="8" rx="2" fill="#fff" opacity=".7"/><rect x="3" y="13" width="8" height="8" rx="2" fill="#fff" opacity=".7"/><rect x="13" y="13" width="8" height="8" rx="2" fill="#fff" opacity=".5"/></svg>
-  <div><h1>Generador de Recorridos</h1><span>UTP · Día de Integración</span></div>
-</header>
-
-<div class="app">
-
-<!-- ══ PANEL ══ -->
-<div class="panel" id="panel">
-
-  <!-- 1. LABORATORIOS -->
-  <div>
-    <div class="section-title">1 · Laboratorios / Salones</div>
-    <div class="labs-grid" id="labsGrid"></div>
-    <button class="btn btn-secondary btn-sm" style="margin-top:7px;width:100%" onclick="openAddLab()">+ Añadir nuevo salón</button>
+<section class="tab on" id="tab-rec"><div class="app">
+ <div class="panel">
+  <div class="card"><div class="st">I · Laboratorios y salones</div>
+   <div class="labs" id="labsGrid"></div>
+   <button class="btn btn-sm btn-full" style="margin-top:10px;padding:9px" onclick="$('#addLab').classList.remove('h')">+ Nuevo salón</button></div>
+  <div class="card"><div class="st">II · Apoyos y mentores</div>
+   <div class="row" style="margin-bottom:10px">
+    <div><label>Nombre</label><input type="text" id="pName" placeholder="Nombre" onkeydown="if(event.key==='Enter')addPerson()"></div>
+    <div style="max-width:118px"><label>Tipo</label><select id="pType"><option>BUS</option><option>CAMPUS</option><option>EXTERNO</option></select></div>
+    <div style="max-width:50px"><button class="btn btn-p" style="width:100%" onclick="addPerson()">+</button></div></div>
+   <div class="plist" id="plist"></div></div>
+  <div class="card"><div class="st">III · Configuración</div>
+   <label>Tamaño de grupo</label>
+   <div class="chips" id="gs"><div class="chip" data-n="1">Individual</div><div class="chip on" data-n="2">Parejas</div><div class="chip" data-n="3">Tríos</div><div class="chip" data-n="4">Cuarteto</div><div class="chip" data-n="5">Quinteto</div></div>
+   <label style="margin-top:14px">Restricciones de grupo</label>
+   <label class="ck"><input type="checkbox" id="noBusBus" checked>BUS no van juntos</label>
+   <label class="ck"><input type="checkbox" id="noExtExt" checked>EXTERNO no van juntos</label>
+   <label style="margin-top:12px">Charlas de cierre</label>
+   <label class="ck"><input type="checkbox" id="noBusTalk" checked>No sea BUS quien dé la charla</label>
+   <label class="ck"><input type="checkbox" id="noExtTalk" checked>No sea EXTERNO quien dé la charla</label>
+   <div class="info" id="prev" style="margin-top:10px">Añade personas para ver la distribución.</div></div>
+  <button class="btn btn-p btn-full" onclick="generate()">Generar recorrido</button>
+ </div>
+ <div class="canvas">
+  <div class="empty" id="empty">Selecciona salones, añade apoyos<br>y pulsa Generar recorrido</div>
+  <div id="result" style="display:none">
+   <div class="tb"><h2 id="rTitle"></h2><button class="btn btn-sm" onclick="generate()">Regenerar</button><button class="btn btn-p btn-sm" onclick="pdfSched()">PDF horario</button></div>
+   <div class="tw" id="tw"></div><div class="legend" id="legend"></div>
+   <div class="sect"><div class="tb"><h3>Roles de los mentores</h3><button class="btn btn-p btn-sm" onclick="pdfRoles()">PDF roles</button></div>
+    <div id="roles"></div><p class="hint">Con los botones Salón y Auditorio cambias a mano quién da cada charla.</p></div>
   </div>
+ </div>
+</div></section>
 
-  <!-- 2. APOYOS -->
-  <div>
-    <div class="section-title">2 · Apoyos / Mentores</div>
-    <div class="row" style="margin-bottom:7px">
-      <div>
-        <label>Nombre</label>
-        <input type="text" id="personName" placeholder="Nombre" onkeydown="if(event.key==='Enter')addPerson()">
-      </div>
-      <div style="max-width:105px">
-        <label>Tipo</label>
-        <select id="personType">
-          <option value="BUS">BUS</option>
-          <option value="CAMPUS">CAMPUS</option>
-          <option value="EXTERNO">EXTERNO</option>
-        </select>
-      </div>
-      <div style="max-width:52px;align-self:flex-end">
-        <button class="btn btn-primary btn-sm" onclick="addPerson()" style="width:100%">+</button>
-      </div>
-    </div>
-    <div class="person-list" id="personList"></div>
-    <p style="font-size:9px;color:var(--muted);margin-top:5px">↕ Arrastra los nombres para reordenar</p>
-  </div>
+<section class="tab" id="tab-dj"><div class="wrap">
+ <div class="card" style="margin-bottom:22px">
+  <div class="st">Generar Declaración Jurada</div>
+  <div class="fld"><label>Sede UTP</label><select id="f_sede"><option>SJL</option><option>LIMA SUR</option><option>ATE</option><option>LIMA NORTE</option><option>LIMA CENTRO</option></select></div>
+  <div class="grid2"><div class="fld"><label>Nombres</label><input type="text" id="f_nombres" autocomplete="given-name" placeholder="Ej: Yvan Yamil"></div>
+   <div class="fld"><label>Apellidos</label><input type="text" id="f_apes" autocomplete="family-name" placeholder="Ej: Sodani Almonacid"></div></div>
+  <div class="grid2"><div class="fld"><label>DNI</label><input type="text" id="f_dni" inputmode="numeric" maxlength="12" placeholder="8 dígitos"></div>
+   <div class="fld"><label>Código de alumno</label><input type="text" id="f_cod" placeholder="U22205770"></div></div>
+  <div class="grid2"><div class="fld"><label>Celular</label><input type="tel" id="f_cel" inputmode="numeric" maxlength="9" placeholder="9 dígitos"></div>
+   <div class="fld"><label>Turno</label><select id="f_turno"><option>MAÑANA</option><option>TARDE</option></select></div></div>
+  <div class="fld"><label>Domicilio</label><input type="text" id="f_dom" autocomplete="street-address" placeholder="Dirección completa"></div>
+  <div class="fld"><label>Fecha del Día UTP (día / mes / año)</label><input type="date" id="f_fecha"></div>
+  <label>Firma (con el dedo o el mouse)</label><canvas id="sigc"></canvas>
+  <div class="row" style="margin-top:12px"><button class="btn" onclick="clearSig()">Borrar firma</button><button class="btn btn-p" onclick="pdfDJ()">Generar PDF</button></div>
+ </div>
+ <div class="st" style="margin-left:2px">Vista previa</div>
+ <div id="djPrev"><div id="djInner"></div></div>
+</div></section>
 
-  <!-- 3. CONFIGURACIÓN -->
-  <div>
-    <div class="section-title">3 · Configuración del recorrido</div>
+<section class="tab" id="tab-res"><div class="wrap">
+ <div class="sub"><button class="on" data-st="vid">Videos y presentaciones</button><button data-st="car">Cartilla Mentor</button></div>
+ <div class="stab on" id="st-vid">
+  <div class="tb"><h3>Videos y presentación de cierre</h3></div><div id="resVid"></div>
+  <div class="tb sect"><h3>PPTs por salón o laboratorio</h3></div><div id="resPpt"></div>
+ </div>
+ <div class="stab" id="st-car">
+  <div class="tb"><h3>Cartilla Mentor · Último Laboratorio</h3><button class="btn btn-p btn-sm" onclick="pdfCart()">Descargar PDF</button></div>
+  <div id="cartView"></div>
+ </div>
+</div></section>
 
-    <div class="field">
-      <label>Número de secciones</label>
-      <div class="opts-row" id="numSections">
-        <div class="opt-chip" onclick="setNumSections(3,this)">3</div>
-        <div class="opt-chip" onclick="setNumSections(4,this)">4</div>
-        <div class="opt-chip active" onclick="setNumSections(5,this)">5</div>
-        <div class="opt-chip" onclick="setNumSections(6,this)">6</div>
-        <div class="opt-chip" onclick="setNumSections(7,this)">7</div>
-      </div>
-    </div>
+<div class="ov h" id="addLab"><div class="modal"><h3>Añadir nuevo salón</h3>
+ <div class="fld"><label>Nombre</label><input type="text" id="nl_n" placeholder="Ej: Sala de Reuniones"></div>
+ <div class="fld"><label>Torre</label><select id="nl_t"><option value="A">Torre A</option><option value="B">Torre B</option><option value="A/B">Ambas / Área común</option></select></div>
+ <div class="fld"><label>Piso</label><input type="text" id="nl_f" placeholder="Ej: Piso 3"></div>
+ <div class="mf"><button class="btn" onclick="$('#addLab').classList.add('h')">Cancelar</button><button class="btn btn-p" onclick="confirmLab()">Añadir</button></div></div></div>
 
-    <div class="field">
-      <label>Tamaño de grupo</label>
-      <div class="opts-row" id="groupSize">
-        <div class="opt-chip" onclick="setGroupSize(1,this)">Individual</div>
-        <div class="opt-chip active" onclick="setGroupSize(2,this)">Parejas</div>
-        <div class="opt-chip" onclick="setGroupSize(3,this)">Tríos</div>
-      </div>
-    </div>
-
-    <div class="field">
-      <label>Restricciones</label>
-      <div style="display:flex;flex-direction:column;gap:5px;margin-top:3px">
-        <label style="display:flex;align-items:center;gap:7px;font-size:11px;font-weight:400;color:var(--text)">
-          <input type="checkbox" id="noBusBus" checked> BUS no van juntos
-        </label>
-        <label style="display:flex;align-items:center;gap:7px;font-size:11px;font-weight:400;color:var(--text)">
-          <input type="checkbox" id="noExtExt" checked> EXTERNO no van juntos
-        </label>
-        <label style="display:flex;align-items:center;gap:7px;font-size:11px;font-weight:400;color:var(--text)">
-          <input type="checkbox" id="noSolo"> Nadie va solo (si es posible)
-        </label>
-      </div>
-    </div>
-
-    <div class="info-box" id="groupPreview">Configura las opciones y pulsa Generar.</div>
-  </div>
-
-  <button class="btn btn-primary btn-full" onclick="generate()" style="margin-top:auto">
-    <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M4 4l16 8-16 8V4z" fill="#fff"/></svg>
-    Generar recorrido
-  </button>
-
-</div>
-
-<!-- ══ CANVAS ══ -->
-<div class="canvas" id="canvas">
-  <div class="canvas-empty" id="emptyState">
-    <svg width="56" height="56" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="#94a3b8" stroke-width="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="#94a3b8" stroke-width="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke="#94a3b8" stroke-width="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke="#94a3b8" stroke-width="1.5"/></svg>
-    <p>Selecciona laboratorios, añade apoyos<br>y pulsa <strong>Generar recorrido</strong></p>
-  </div>
-  <div id="resultArea" style="display:none">
-    <div class="toolbar">
-      <h2 id="resultTitle">Recorrido</h2>
-      <button class="btn btn-secondary btn-sm" onclick="generate()">↺ Regenerar</button>
-      <button class="btn btn-pdf btn-sm" onclick="printPDF()">⬇ PDF</button>
-    </div>
-    <div class="table-wrap" id="tableWrap"></div>
-    <div class="legend" id="legendWrap"></div>
-    <p style="font-size:9px;color:var(--muted);margin-top:8px">💡 Arrastra celdas de salón para intercambiarlas. Arrastra filas de personas en el panel izquierdo para cambiar el orden.</p>
-  </div>
-</div>
-
-</div>
-
-<!-- ══ MODAL NUEVO LAB ══ -->
-<div class="overlay hidden" id="addLabOverlay">
-  <div class="modal">
-    <h3>Añadir nuevo salón</h3>
-    <div class="field">
-      <label>Nombre del salón</label>
-      <input type="text" id="newLabName" placeholder="Ej: Sala de Reuniones">
-    </div>
-    <div class="field">
-      <label>Torre</label>
-      <select id="newLabTower">
-        <option value="A">Torre A</option>
-        <option value="B">Torre B</option>
-        <option value="A/B">Ambas / Área común</option>
-        <option value="?">Sin confirmar</option>
-      </select>
-    </div>
-    <div class="field">
-      <label>Piso (dejar vacío si no se sabe)</label>
-      <input type="text" id="newLabFloor" placeholder="Ej: Piso 3">
-    </div>
-    <div class="field">
-      <label style="display:flex;align-items:center;gap:8px;font-weight:400;font-size:12px;color:var(--text)">
-        <input type="checkbox" id="newLabPending"> Ambiente pendiente de confirmar
-      </label>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="closeAddLab()">Cancelar</button>
-      <button class="btn btn-primary" onclick="confirmAddLab()">Añadir</button>
-    </div>
-  </div>
-</div>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
-/* ══ DATOS ══ */
-const LABS_DEFAULT = [
-  {id:'a0110',  name:'Lab. Procesos Industriales',      code:'A0110',      tower:'A',   floor:'Piso 1',      color:'#b5d5f5', pending:false},
-  {id:'a0211',  name:'Arquitectura de Computadoras',    code:'A0211',      tower:'A',   floor:'Piso 2',      color:'#aee4d4', pending:false},
-  {id:'a0613',  name:'Sala Gesell',                     code:'A0613',      tower:'A',   floor:'Piso 6',      color:'#a8d8a8', pending:false},
-  {id:'b0307',  name:'Sala de Audiencias',              code:'B0307',      tower:'B',   floor:'Piso 3',      color:'#f9d29d', pending:false},
-  {id:'b0610',  name:'Sala de Audiencias',              code:'B0610',      tower:'B',   floor:'Piso 6',      color:'#f9c784', pending:false},
-  {id:'b303',   name:'Design Thinking – Administración',code:'B303',       tower:'B',   floor:'Piso 3',      color:'#f4c6a0', pending:false},
-  {id:'bss04',  name:'Lab. Mecatrónica, Robótica y CNC',code:'BSS04',      tower:'B',   floor:'Sótano',      color:'#f4a7b9', pending:false},
-  {id:'derecho',name:'Laboratorio de Derecho',          code:'Derecho',    tower:'B',   floor:'por confirmar',color:'#d5c5e8',pending:true},
-  {id:'acomun', name:'Área Común',                      code:'Área Común', tower:'A/B', floor:'—',           color:'#c8c8c8', pending:false},
-  {id:'msuelos',name:'Mecánica de Suelos',              code:'Mec.Suelos', tower:'B',   floor:'Semisótano',  color:'#f7e79e', pending:false},
-  {id:'talleres',name:'Zona de Talleres Azotea',        code:'Talleres',   tower:'A/B', floor:'Azotea',      color:'#ffd6a5', pending:false},
-];
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2800)}
 
-let labs     = LABS_DEFAULT.map(l=>({...l, selected:false}));
-let persons  = [];
-let groupSize   = 2;
-let numSections = 5;
+/* Pestañas */
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button,.tab').forEach(x=>x.classList.remove('on'));b.classList.add('on');$('#tab-'+b.dataset.tab).classList.add('on');if(b.dataset.tab==='dj'){initSig();fitPrev()}scrollTo(0,0)});
+document.querySelectorAll('.sub button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.sub button,.stab').forEach(x=>x.classList.remove('on'));b.classList.add('on');$('#st-'+b.dataset.st).classList.add('on')});
 
-// current state for re-render
-let _currentGroups = [];
-let _currentSched  = [];
-let _currentLabs   = [];
+/* Datos */
+const LABS=[['a0110','Lab. Procesos Industriales','A0110','A','Piso 1','#b5d5f5'],['a0211','Arquitectura de Computadoras','A0211','A','Piso 2','#aee4d4'],['a0613','Sala Gesell','A0613','A','Piso 6','#a8d8a8'],['b0307','Sala de Audiencias','B0307','B','Piso 3','#f9d29d'],['b0610','Sala de Audiencias','B0610','B','Piso 6','#f9c784'],['b303','Design Thinking – Administración','B303','B','Piso 3','#f4c6a0'],['bss04','Lab. Mecatrónica, Robótica y CNC','BSS04','B','Sótano','#f4a7b9'],['derecho','Laboratorio de Derecho','Derecho','B','—','#d5c5e8'],['acomun','Área Común','Área Común','A/B','—','#c8c8c8'],['msuelos','Mecánica de Suelos','Mec.Suelos','B','Semisótano','#f7e79e'],['talleres','Zona de Talleres Azotea','Talleres','A/B','Azotea','#ffd6a5']];
+let labs=LABS.map(l=>({id:l[0],name:l[1],code:l[2],tower:l[3],floor:l[4],color:l[5],selected:false}));
+let persons=store.get('aud_persons',[]),gsize=2,groups=[],sched=[],selLabs=[],aud=null,spk=[];
+const MES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 
-/* ══ LABS ══ */
-function renderLabs(){
-  document.getElementById('labsGrid').innerHTML = labs.map((l,i)=>`
-    <div class="lab-item ${l.selected?'selected':''}" onclick="toggleLab(${i})">
-      <div class="dot" style="background:${l.color}"></div>
-      <div class="lab-info">
-        <div class="lab-name">${l.code} · ${l.name}</div>
-        <div class="lab-loc">Torre ${l.tower} · ${l.floor} ${l.pending?'<span class="warn-badge">⚠ pendiente</span>':''}</div>
-      </div>
-    </div>`).join('');
-}
-function toggleLab(i){ labs[i].selected=!labs[i].selected; renderLabs(); updatePreview(); }
+function renderLabs(){$('#labsGrid').innerHTML=labs.map((l,i)=>`<div class="lab ${l.selected?'sel':''}" onclick="labs[${i}].selected=!labs[${i}].selected;renderLabs()"><div class="dot" style="background:${l.color}"></div><div><b>${esc(l.code)} · ${esc(l.name)}</b><small>Torre ${esc(l.tower)} · ${esc(l.floor)}</small></div></div>`).join('')}
+function confirmLab(){const n=$('#nl_n').value.trim();if(!n)return;const cs=['#e0d7ff','#d7f0ff','#d7ffe8','#fff3d7','#ffd7e8'];labs.push({id:'c'+Date.now(),name:n,code:n,tower:$('#nl_t').value,floor:$('#nl_f').value.trim()||'—',color:cs[labs.length%5],selected:true});$('#nl_n').value=$('#nl_f').value='';renderLabs();$('#addLab').classList.add('h')}
 
-/* ══ PERSONS ══ */
 function renderPersons(){
-  const list = document.getElementById('personList');
-  list.innerHTML = persons.map((p,i)=>`
-    <div class="person-item" draggable="true" data-pi="${i}">
-      <span style="cursor:grab;color:var(--muted);font-size:13px">⠿</span>
-      <span class="pname">${p.name}</span>
-      <span class="badge badge-${p.type.toLowerCase()}">${p.type}</span>
-      <button class="btn btn-danger btn-sm" onclick="removePerson(${i})">✕</button>
-    </div>`).join('');
-  initPersonDrag();
-  updatePreview();
-}
+ $('#plist').innerHTML=persons.map((p,i)=>`<div class="pitem" data-pi="${i}"><span class="grip"></span><span class="n">${esc(p.name)}</span><span class="badge b-${p.type.toLowerCase()}">${p.type}</span><button class="x" onclick="persons.splice(${i},1);renderPersons()">×</button></div>`).join('');
+ dragify('.pitem',(a,b)=>{const m=persons.splice(+a.dataset.pi,1)[0];persons.splice(+b.dataset.pi,0,m);renderPersons()});
+ store.set('aud_persons',persons);preview()}
+function addPerson(){const n=$('#pName').value.trim();if(!n)return;persons.push({name:n,type:$('#pType').value});$('#pName').value='';renderPersons()}
+document.querySelectorAll('#gs .chip').forEach(c=>c.onclick=()=>{document.querySelectorAll('#gs .chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');gsize=+c.dataset.n;preview()});
+function preview(){const n=persons.length;if(!n){$('#prev').textContent='Añade personas para ver la distribución.';return}const g=Math.ceil(n/gsize),b=Math.floor(n/g),e=n%g;$('#prev').textContent=`${n} personas, ${g} grupo(s). `+(e?`${g-e} de ${b} y ${e} de ${b+1}.`:`Todos de ${b}.`)}
 
-function addPerson(){
-  const n=document.getElementById('personName').value.trim();
-  const t=document.getElementById('personType').value;
-  if(!n) return;
-  persons.push({name:n, type:t});
-  document.getElementById('personName').value='';
-  renderPersons();
-}
+/* Arrastre con copia que sigue el dedo */
+let D=null,hot=null;
+function dragify(sel,drop){document.querySelectorAll(sel).forEach(el=>{el.classList.add('dg');el.oncontextmenu=e=>e.preventDefault();
+ el.addEventListener('pointerdown',e=>{if((e.pointerType==='mouse'&&e.button!==0)||e.target.closest('button'))return;const s=D={el,sel,drop,x:e.clientX,y:e.clientY,on:false,touch:e.pointerType!=='mouse'};if(s.touch)s.t=setTimeout(()=>{if(D===s)begin(s)},220)})})}
+function begin(s){const r=s.el.getBoundingClientRect(),g=s.el.cloneNode(true);g.classList.add('ghost');g.classList.remove('dg','lifted');g.style.width=r.width+'px';g.style.left=r.left+'px';g.style.top=r.top+'px';s.ox=s.x-r.left;s.oy=s.y-r.top;document.body.appendChild(g);s.g=g;s.on=true;s.el.classList.add('lifted');document.body.classList.add('dragging-now');if(navigator.vibrate)navigator.vibrate(14)}
+function endDrag(){if(!D)return;clearTimeout(D.t);if(D.g)D.g.remove();D.el.classList.remove('lifted');if(hot)hot.classList.remove('hot');hot=null;document.body.classList.remove('dragging-now');D=null}
+document.addEventListener('pointermove',e=>{const s=D;if(!s)return;if(!s.on){if(Math.hypot(e.clientX-s.x,e.clientY-s.y)<6)return;if(s.touch){clearTimeout(s.t);D=null;return}begin(s)}
+ s.g.style.left=e.clientX-s.ox+'px';s.g.style.top=e.clientY-s.oy+'px';const t=document.elementFromPoint(e.clientX,e.clientY)?.closest(s.sel);
+ if(hot&&hot!==t)hot.classList.remove('hot');hot=t&&t!==s.el?t:null;if(hot)hot.classList.add('hot');
+ const w=$('#tw'),r=w.getBoundingClientRect();if(s.sel.includes('#sched')&&e.clientY>r.top&&e.clientY<r.bottom){if(e.clientX>r.right-40)w.scrollLeft+=10;if(e.clientX<r.left+40)w.scrollLeft-=10}
+ if(e.clientY>innerHeight-60)scrollBy(0,10);if(e.clientY<60)scrollBy(0,-10)});
+document.addEventListener('pointerup',()=>{if(D&&D.on&&hot){const s=D,h=hot;endDrag();s.drop(s.el,h)}else endDrag()});
+document.addEventListener('pointercancel',endDrag);
+document.addEventListener('touchmove',e=>{if(D&&D.on&&e.cancelable)e.preventDefault()},{passive:false});
 
-function removePerson(i){ persons.splice(i,1); renderPersons(); }
+/* Grupos, horario y charlas */
+function buildGroups(){const nb=$('#noBusBus').checked,ne=$('#noExtExt').checked,n=persons.length,G=Math.ceil(n/gsize),b=Math.floor(n/G),e=n%G,pool=[...persons],out=[];
+ for(let s=0;s<G;s++){const size=b+(s<e?1:0),grp=[];
+  for(let i=0;i<pool.length&&grp.length<size;i++){const c=pool[i];if(nb&&c.type==='BUS'&&grp.some(m=>m.type==='BUS'))continue;if(ne&&c.type==='EXTERNO'&&grp.some(m=>m.type==='EXTERNO'))continue;grp.push(c);pool.splice(i,1);i=-1}
+  while(grp.length<size&&pool.length)grp.push(pool.shift());out.push(grp)}return out}
+function buildSched(G,L){const s=L.map(l=>l.id);while(s.length<G)s.push('LIBRE');const N=s.length;return Array.from({length:G},(_,g)=>Array.from({length:N},(_,r)=>s[(g+r)%N]))}
+function eligible(l){const nb=$('#noBusTalk').checked,ne=$('#noExtTalk').checked,f=l.filter(p=>!(nb&&p.type==='BUS')&&!(ne&&p.type==='EXTERNO'));return f.length?f:l}
+function pick(l){const w=l.map(p=>p.type==='BUS'?.25:1);let r=Math.random()*w.reduce((a,b)=>a+b,0);for(let i=0;i<l.length;i++){r-=w[i];if(r<=0)return l[i]}return l[l.length-1]}
+function generate(){selLabs=labs.filter(l=>l.selected);if(!selLabs.length)return toast('Selecciona al menos un salón');if(!persons.length)return toast('Añade al menos un apoyo');
+ groups=buildGroups();sched=buildSched(groups.length,selLabs);aud=pick(eligible(persons));spk=groups.map(g=>{const c=g.filter(p=>p!==aud);return pick(eligible(c.length?c:g))});
+ $('#empty').style.display='none';$('#result').style.display='block';$('#rTitle').textContent=`Recorrido · ${groups.length} grupos · ${selLabs.length} salones`;renderResult()}
+function renderResult(){
+ if(!persons.includes(aud))aud=pick(eligible(persons));
+ groups.forEach((g,i)=>{if(!g.includes(spk[i])){const c=g.filter(p=>p!==aud);spk[i]=pick(eligible(c.length?c:g))}});
+ $('#tw').innerHTML=tableHTML(false);const seen=new Set();
+ $('#legend').innerHTML=selLabs.map(l=>seen.has(l.id)?'':(seen.add(l.id),`<div><i style="background:${l.color}"></i>${esc(l.code)} · ${esc(l.name)}</div>`)).join('');
+ $('#roles').innerHTML=rolesHTML(false);
+ dragify('#sched .ci,#sched .cl',(a,b)=>{const[g1,r1,g2,r2]=[+a.dataset.g,+a.dataset.r,+b.dataset.g,+b.dataset.r];[sched[g1][r1],sched[g2][r2]]=[sched[g2][r2],sched[g1][r1]];renderResult()});
+ dragify('#sched .pchip',(a,b)=>{const[g1,i1,g2,i2]=[+a.dataset.g,+a.dataset.i,+b.dataset.g,+b.dataset.i];[groups[g1][i1],groups[g2][i2]]=[groups[g2][i2],groups[g1][i1]];renderResult()})}
+function tableHTML(pdf){const map={};labs.forEach(l=>map[l.id]=l);const N=sched[0].length;
+ let h=`<table id="${pdf?'':'sched'}"><thead><tr><th>Grupo</th>${Array.from({length:N},(_,r)=>`<th>Ronda ${r+1}</th>`).join('')}</tr></thead><tbody>`;
+ groups.forEach((grp,g)=>{h+=`<tr><td class="gc">${grp.map((p,i)=>`<div class="pchip" ${pdf?'':`data-g="${g}" data-i="${i}"`}>${pdf?'':'<span class="grip"></span>'}<span style="flex:1">${esc(p.name)}</span><span class="badge b-${p.type.toLowerCase()}">${p.type}</span></div>`).join('')}</td>`;
+  for(let r=0;r<N;r++){const id=sched[g][r],at=pdf?'':`data-g="${g}" data-r="${r}"`;
+   if(id==='LIBRE')h+=`<td><div class="cl" ${at}>— libre —</div></td>`;else{const l=map[id];h+=`<td><div class="ci" ${at} style="background:${l.color}"><b>${esc(l.code)}</b><span>${esc(l.name)}</span><em>Torre ${esc(l.tower)} · ${esc(l.floor)}</em></div></td>`}}
+  h+='</tr>'});return h+'</tbody></table>'}
+const roleOf=t=>t==='BUS'?'Acompañamiento en bus y recorrido en campus':t==='CAMPUS'?'Guía de recorrido en campus':'Apoyo en el recorrido';
+function rolesHTML(pdf){const a=groups.flat().includes(aud)?aud:null;
+ let h=`<div class="info" style="margin-bottom:10px"><b>CHARLA DE CIERRE DIA UTP - AUDITORIO:</b> ${a?esc(a.name)+' ('+a.type+')':'—'}</div><div class="tw" ${pdf?'style="border:0"':''}><table class="rt"><thead><tr><th>Grupo</th><th>Mentor</th><th>Tipo</th><th>Rol</th>${pdf?'':'<th>Charla</th>'}</tr></thead><tbody>`;
+ groups.forEach((g,gi)=>g.forEach((p,i)=>{const tk=(p===aud?'<span class="talk k">CHARLA DE CIERRE DIA UTP - AUDITORIO</span>':'')+(p===spk[gi]?'<span class="talk">CHARLA DE CIERRE DIA UTP - SALÓN</span>':'');
+  h+=`<tr>${i?'':`<td class="g" rowspan="${g.length}">${gi+1}</td>`}<td><b>${esc(p.name)}</b></td><td><span class="badge b-${p.type.toLowerCase()}">${p.type}</span></td><td>${roleOf(p.type)}<br>${tk}</td>${pdf?'':`<td><button class="mini" onclick="spk[${gi}]=groups[${gi}][${i}];renderResult()">Salón</button><button class="mini" onclick="aud=groups[${gi}][${i}];renderResult()">Auditorio</button></td>`}</tr>`}));
+ return h+'</tbody></table></div>'}
 
-/* ══ PERSON DRAG (reorder) ══ */
-function initPersonDrag(){
-  const items = document.querySelectorAll('.person-item');
-  let dragIdx = null;
+/* PDF */
+async function savePDF(node,filename,land,opt){
+ if(!window.html2pdf)return toast('No se pudo cargar el generador de PDF');toast('Generando PDF…');
+ try{const blob=await html2pdf().set(Object.assign({margin:land?8:[12,14],image:{type:'jpeg',quality:.96},html2canvas:{scale:2,backgroundColor:'#fff',windowWidth:node.scrollWidth+40},jsPDF:{unit:'mm',format:'letter',orientation:land?'landscape':'portrait'},pagebreak:{mode:['css','legacy'],avoid:['tr','.keep']}},opt||{})).from(node).outputPdf('blob');
+  const dl=window.claude&&window.claude.use?await window.claude.use('downloads'):null;
+  if(dl)await dl.save({filename,data:blob});else{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click()}
+ }catch(e){if(e&&e.code==='declined')return;toast('No se pudo generar el PDF')}}
+function pdfNode(inner,w){const d=document.createElement('div');d.style.cssText=`width:${w}px;background:#fff;color:#000;font:12px Arial,sans-serif`;
+ d.innerHTML=`<style>table{border-collapse:collapse;width:100%;font-size:11px}th{background:#7a0e13;color:#fff;padding:7px;border:1px solid #000}td{border:1px solid #888;padding:0;vertical-align:middle}td.gc{padding:5px;background:#f2f2f2}.pchip{display:flex;gap:6px;padding:5px 7px;margin:2px 0;border:1px solid #aaa;border-radius:3px;font-weight:700;background:#fff}.badge{padding:2px 6px;border-radius:2px;font-size:9px;font-weight:700;color:#fff}.b-bus{background:#1a6fc4}.b-campus{background:#1e8a4c}.b-externo{background:#b4231b}.ci{padding:8px 6px}.ci b{display:block}.ci span,.ci em{display:block;font-size:9px;font-style:normal}.cl{padding:12px;text-align:center;color:#888;font-size:10px}.rt td,.rt th{padding:7px 9px}.g{text-align:center;font-weight:700;background:#f2f2f2}.talk{display:inline-block;background:#c8161d;color:#fff;font-size:9px;font-weight:700;padding:2px 6px;margin:2px 3px 0 0}.talk.k{background:#000}.info{background:#fdecec;border-left:4px solid #c8161d;padding:8px 10px;font-size:12px}</style>`+inner;return d}
+const head=t=>`<div style="border-bottom:4px solid #c8161d;padding-bottom:8px;margin-bottom:12px"><b style="font-size:17px">${t}</b><br><span style="font-size:10px;color:#666">APP Apoyo Día UTP</span></div>`;
+function pdfSched(){savePDF(pdfNode(head('Horario del recorrido · Día UTP')+tableHTML(true),1060),'Recorrido-Dia-UTP.pdf',true)}
+function pdfRoles(){savePDF(pdfNode(head('Roles de los mentores · Día UTP')+rolesHTML(true),690),'Roles-Mentores-Dia-UTP.pdf',false)}
 
-  items.forEach(el=>{
-    el.addEventListener('dragstart',()=>{ dragIdx=+el.dataset.pi; el.classList.add('p-dragging'); });
-    el.addEventListener('dragend',()=>{ el.classList.remove('p-dragging'); dragIdx=null; });
-    el.addEventListener('dragover',e=>{ e.preventDefault(); el.classList.add('p-drag-over'); });
-    el.addEventListener('dragleave',()=>{ el.classList.remove('p-drag-over'); });
-    el.addEventListener('drop',e=>{
-      e.preventDefault(); el.classList.remove('p-drag-over');
-      const targetIdx=+el.dataset.pi;
-      if(dragIdx===null||dragIdx===targetIdx) return;
-      const moved=persons.splice(dragIdx,1)[0];
-      persons.splice(targetIdx,0,moved);
-      renderPersons();
-    });
+/* Declaración Jurada: réplica fiel del Word (carta, Verdana/Tahoma 10 pt, 2 páginas) */
+const DJCSS=`.pg{width:816px;height:1054px;padding:50px 112px 0;background:#fff;color:#000;font:10pt/1.5 Verdana,'DejaVu Sans',Tahoma,sans-serif;text-align:justify;box-sizing:border-box}.pg p{margin:0}.pg .t{font-family:Tahoma,Verdana,sans-serif;font-weight:700}.pg .it{display:flex;margin-top:22px}.pg .it>i{width:34px;flex:none;font-style:normal}.pg .it>div{flex:1}.pg .bl p{text-align:left;padding-left:9px;text-indent:-9px;margin-bottom:2px}.pg .sg{margin-top:22px}.pg u{text-decoration:underline}`;
+const fv=id=>$('#'+id).value.trim();
+function fechaTxt(){const v=fv('f_fecha');if(!v)return null;const[y,m,d]=v.split('-');return{d:d.padStart(2,'0'),m:MES[+m-1],y,mm:m}}
+function djPages(sig){const f=fechaTxt(),sede=fv('f_sede'),nom=(fv('f_nombres')+' '+fv('f_apes')).trim().replace(/\s+/g,' ').toUpperCase(),nb='&nbsp;';
+ const u=(x,n)=>`<u>${nb}${x?esc(x):nb.repeat(n)}${nb}</u>`;
+ const dias=f?`${f.d} DE ${f.m.toUpperCase()}`:'',fecha=f?`${f.d} De ${f.m} DEL ${f.y}`:'';
+ return `<style>${DJCSS}</style><div class="pg" style="page-break-after:always">
+<p class="t" style="text-align:center;font-size:10pt"><u>ANEXO 2</u></p>
+<p class="t" style="text-align:center;font-size:9.5pt;margin-top:24px">DECLARACIÓN JURADA EN EL MARCO DE UN CONTRATO DE LOCACIÓN DE SERVICIOS</p>
+<p style="margin-top:20px">El suscrito ${u(nom,24)}, mayor de edad, identificado con DNI No. ${esc(fv('f_dni'))||nb.repeat(8)}, alumno de la Universidad Tecnológica del Perú (“UTP”), en el campus de ${esc(sede)}, con código de alumno ${u(fv('f_cod').toUpperCase(),9)}, con número celular ${u(fv('f_cel'),9)} y domicilio en ${esc(fv('f_dom'))||nb.repeat(20)} (en adelante “el Apoyo”); por el presente documento <b>DECLARO BAJO JURAMENTO</b>, lo siguiente:</p>
+<div class="it"><i>1.</i><div>Que he sido contratado por la UTP como locador de servicios, para desempeñarme como personal de “Apoyo” durante el/los evento(s)</div></div>
+<p><u>DIA UTP${nb.repeat(6)}</u> a desarrollarse el/los día(s)${u(dias,12)}, Turno ${esc(fv('f_turno'))}<br>en el campus de UTP ${esc(sede)} ; de conformidad con los términos establecidos en el documento adjunto, que declaro conocer y aceptar, y los cuales cumpliré a cabalidad; siendo constancia de ello mi firma en la presente Declaración Jurada.</p>
+<div class="it"><i>2.</i><div>Como consecuencia de lo anterior, no se ha generado ninguna relación de dependencia respecto de UTP, sino únicamente una locación de servicios de índole civil, la cual será retribuida por UTP mediante el pago de la contraprestación de la siguiente forma:</div></div>
+<div class="bl" style="margin-top:22px"><p>- Por el recorrido durante el Día UTP o testimonio o servicio de apoyo de un evento durante mediodía: <b>S/ 40.00 (Cuarenta y 00/100 soles)</b>.</p><p>- Por acompañamiento en buses y recorrido en campus: <b>S/50.00 (Cincuenta y 00/100 Soles).</b></p><p>- Si el evento es cancelado por el colegio y el Apoyo se encuentra en el campus: <b>S/ 20.00 (veinte y 00/100 soles).</b></p></div>
+<div class="it"><i>3.</i><div>El pago correspondiente a la prestación del servicio se realizará en un plazo máximo de quince (15) días hábiles posteriores a la fecha en que Mesa de Partes de UTP brinda conformidad al recibo por honorarios presentado por el Apoyo.</div></div>
+<p style="margin:22px 0 0 34px;text-align:left">Si el suscrito cancelara su participación en el Día UTP, perderá el derecho a la retribución pactada.</p>
+<p style="margin:22px 0 0 34px">En mi calidad de Apoyo, puedo desempeñar varias funciones adaptándome con flexibilidad a las diversas necesidades que puedan surgir durante el/los eventos referidos en el numeral 1 anterior.</p>
+<div class="it"><i>4.</i><div>Declaro que cualquier elemento de vestuario, accesorio, indumentaria, y/o cualquier recurso proporcionado por UTP para efectos de mi desempeño como Apoyo, únicamente podrá ser usado exclusivamente para ese propósito, y únicamente durante el período de tiempo en que me encuentre realizando funciones de Apoyo.</div></div></div>
+<div class="pg">
+<div class="it" style="margin-top:0"><i>5.</i><div>Declaro conocer que toda la información de UTP, de sus alumnos, colaboradores, potenciales alumnos, visitantes y/u otras personas naturales, es <u>Información Confidencial</u> y de exclusiva propiedad de UTP; declarando el suscrito que no ha sido autorizado a acceder a, ni usar ninguna Información Confidencial.</div></div>
+<div class="it" style="margin-top:30px"><i>6.</i><div>El Apoyo reconoce que acceder sin autorización, usar, divulgar, compartir o reproducir cualquier Información Confidencial constituye una infracción muy grave a nuestro Reglamento de Disciplina y en ese sentido se podrá iniciar un proceso disciplinario en su contra; sin perjuicio de iniciar todas las acciones legales que correspondan para salvaguardar la Información Confidencial.</div></div>
+<div class="it" style="margin-top:30px"><i>7.</i><div>El Apoyo declara conocer y aceptar todos los Reglamentos que le son aplicables en su calidad de alumno de la UTP, a los cuales queda sujeto y obligado durante su desempeño como personal de Apoyo.</div></div>
+<p class="t" style="text-align:right;font-size:9.5pt;margin-top:56px;padding-right:12px">Fecha:<u>${nb}${fecha||nb.repeat(18)}</u></p>
+<div style="height:116px;margin-top:22px">${sig?`<img src="${sig}" style="height:110px">`:''}</div>
+<div style="border-top:1px solid #000;width:2.9in"></div>
+<p class="t" style="font-size:9.5pt;margin-top:6px;text-align:left">Nombre: ${esc(nom)}</p>
+<p class="t" style="font-size:9.5pt;margin-top:6px;text-align:left;padding-left:3px">DNI: ${esc(fv('f_dni'))}</p></div>`}
+let sigOK=false,sigInit=false;const sc=$('#sigc');
+function initSig(){if(sigInit||!sc.clientWidth)return;sigInit=true;const r=devicePixelRatio||1;sc.width=sc.clientWidth*r;sc.height=sc.clientHeight*r;const c=sc.getContext('2d');c.scale(r,r);c.lineWidth=2.6;c.lineCap=c.lineJoin='round';c.strokeStyle='#000';let on=false;
+ const pt=e=>{const b=sc.getBoundingClientRect();return[e.clientX-b.left,e.clientY-b.top]};
+ sc.onpointerdown=e=>{on=true;sc.setPointerCapture(e.pointerId);const[x,y]=pt(e);c.beginPath();c.moveTo(x,y);c.lineTo(x+.1,y+.1);c.stroke()};
+ sc.onpointermove=e=>{if(!on)return;const[x,y]=pt(e);c.lineTo(x,y);c.stroke();sigOK=true};
+ sc.onpointerup=sc.onpointercancel=()=>{on=false;djPrev()}}
+function clearSig(){const c=sc.getContext('2d');c.save();c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,sc.width,sc.height);c.restore();sigOK=false;djPrev()}
+const sigURL=()=>sigOK&&sigInit?sc.toDataURL('image/png'):'';
+function djPrev(){$('#djInner').innerHTML=djPages(sigURL()).replace('page-break-after:always','margin-bottom:16px;box-shadow:0 6px 24px rgba(0,0,0,.7)');fitPrev()}
+function fitPrev(){const p=$('#djPrev'),w=p.clientWidth;if(!w)return;const s=Math.min(1,w/816);$('#djInner').style.transform=`scale(${s})`;p.style.height=(2*1054+16)*s+'px'}
+addEventListener('resize',fitPrev);
+document.querySelectorAll('#tab-dj input,#tab-dj select').forEach(e=>e.addEventListener('input',djPrev));
+function pdfDJ(){const dni=fv('f_dni');
+ if(!fv('f_nombres')||!fv('f_apes'))return toast('Completa nombres y apellidos');
+ if(!/^\d{8}$/.test(dni)&&!/^[A-Za-z0-9]{9,12}$/.test(dni))return toast('DNI no válido');
+ if(!fv('f_cod')||!fv('f_cel')||!fv('f_dom')||!fv('f_fecha'))return toast('Completa código, celular, domicilio y fecha');
+ if(!sigOK)return toast('Falta tu firma');
+ const d=document.createElement('div');d.style.cssText='width:816px;background:#fff';d.innerHTML=djPages(sigURL());const f=fechaTxt();
+ const nom=(fv('f_nombres')+' '+fv('f_apes')).trim().toUpperCase().replace(/\s+/g,'_');
+ savePDF(d,`DJ-${nom}-${f.d}-${f.mm}.pdf`,false,{margin:0,html2canvas:{scale:2,backgroundColor:'#fff',windowWidth:900},pagebreak:{mode:['css']}})}
 
-    // touch reorder
-    let tSrc=null;
-    el.addEventListener('touchstart',e=>{ tSrc=+el.dataset.pi; el.classList.add('p-dragging'); },{passive:true});
-    el.addEventListener('touchend',e=>{
-      el.classList.remove('p-dragging');
-      const t=e.changedTouches[0];
-      const target=document.elementFromPoint(t.clientX,t.clientY)?.closest('.person-item');
-      if(!target||tSrc===null) return;
-      const tIdx=+target.dataset.pi;
-      if(tSrc===tIdx) return;
-      const moved=persons.splice(tSrc,1)[0];
-      persons.splice(tIdx,0,moved);
-      renderPersons();
-      tSrc=null;
-    },{passive:true});
-  });
-}
+/* Cartilla Mentor */
+const P=t=>`<p>${t}</p>`,L=a=>`<ul>${a.map(x=>`<li>${x}</li>`).join('')}</ul>`,E=t=>`<p class="e">${t}</p>`,R=t=>`<p class="r">${t}</p>`,H=(n,t)=>`<h4><i>${n}.</i> ${t}</h4>`;
+const CART=[
+{n:1,l:[H(1,'INICIO + EXPERIENCIA DÍA UTP')+R('Mentor:')+P('Chicos, antes de empezar... quiero que me cuenten algo. Después de todo lo que han visto hoy... ¿Qué fue lo que más les sorprendió de la UTP?')+E('(Pausa – escuchar respuestas)')+L(['¿Los laboratorios?','¿La tecnología?','¿Los espacios?','¿El ambiente universitario?'])+P('¿O quizá el hecho de imaginarse estudiando aquí?')+E('(interacción)')+P('Y eso último es importante. Porque normalmente uno viene a un Día UTP pensando: “solo voy a conocer una universidad”.')+L(['Pero algo cambia cuando recorres el campus.','Cuando entras a los laboratorios.','Cuando ves a estudiantes haciendo proyectos reales.','Cuando escuchas a los docentes.','Cuando sientes el ambiente universitario.'])+P('Empiezas a imaginarte aquí. Y creo que eso les pasa a muchísimas personas. Porque una cosa es ver una universidad por redes sociales... y otra muy distinta es vivirla.')+H(2,'CONEXIÓN CON ELLOS')+P('Y justo ahí pasa algo curioso. Porque llega un momento en el colegio donde todos empiezan a preguntarte:')+L(['¿Qué carrera vas a elegir?','¿A qué universidad vas a ir?','¿Ya tienes decidido tu futuro?'])+P('Y uno por dentro piensa... “No tengo idea todavía.”')+E('(risas/interacción)')+P('Y la verdad... eso es mucho más normal de lo que creen. Pero algo que me gusta muchísimo de la UTP es que nadie espera que llegues teniendo todo resuelto.')+P('Porque la universidad también es el lugar donde descubres qué te apasiona, qué te gusta y hasta de lo que eres capaz.')],
+ r:[H(3,'CARRERAS + CALIDAD')+P('Hoy algunos estuvieron en laboratorios de ingeniería y tecnología. Otros quizá recorrieron espacios de salud, negocios, comunicaciones, diseño o arquitectura. Y eso es lo increíble de la UTP: No importa cuál sea tu pasión, aquí encuentras una carrera conectada con lo que hoy necesita el mundo laboral.')+P('Y algo importante... La UTP no busca solo que memorices teoría. Busca que aprendas haciendo.')+P('Por eso los laboratorios, talleres y espacios especializados están pensados para que desde el inicio tengan experiencias reales y desarrollen habilidades que sí van a usar en el futuro.')+P('Porque el mundo laboral hoy ya no busca solo personas que sepan mucho. Busca personas que sepan resolver, adaptarse, crear y trabajar en equipo.')+H(4,'DOMINA EL CAMBIO')+P('Hay una frase que representa muy bien a la UTP:')+R('“Domina el Cambio”.')+P('Hoy el mundo cambia constantemente. La tecnología evoluciona, aparecen nuevas profesiones y las empresas buscan personas que sepan adaptarse.')+P('En la UTP aprendí que no basta con seguir el cambio, sino prepararte para enfrentarlo.')+P('Porque lo importante es que tengas las ganas de dominar el cambio y convertir cada desafío en una oportunidad para seguir creciendo.')],
+ f:'Gira la cartilla para continuar el speech (5–8)'},
+{n:2,l:[H(5,'INTERNACIONALIDAD')+P('Y hay algo que sinceramente me sorprendió cuando ingresé a la UTP: descubrir que las oportunidades podían llegar mucho más lejos de lo que imaginaba.')+P('<b>Este año, por ejemplo, 15 estudiantes tuvieron la oportunidad de vivir una experiencia académica en Harvard.</b> Cuando conocí esa noticia pensé: “¿Y si algún día pudiera ser yo?”.')+P('Después descubrí que eso era solo una parte de todo lo que ofrece la universidad. La UTP cuenta con más de 1,600 convenios internacionales, que permiten acceder a intercambios, programas y experiencias académicas con universidades de diferentes partes del mundo, como UC Berkeley, el Tecnológico de Monterrey, la University of Pennsylvania y muchas otras instituciones de prestigio.')+P('Lo que más me motiva es saber que esas oportunidades también están al alcance de nosotros. Hoy ustedes están en quinto de secundaria y, aunque parezca algo lejano, dentro de unos años podrían ser quienes representen a la UTP en una experiencia internacional.')+P('Eso te hace entender que la universidad no solo te prepara para ejercer una profesión, sino también para pensar en grande y aprovechar oportunidades que pueden cambiar tu futuro.')+H(7,'ACOMPAÑAMIENTO')+P('Si hay algo que realmente marcó mi experiencia en la UTP, fue darme cuenta de que nunca estuve solo.')+P('Empezar la universidad puede dar un poco de miedo. A mí también me pasó. Pero siempre encontré personas dispuestas a orientarme, resolver mis dudas y ayudarme a seguir avanzando.')+P('Ese acompañamiento hizo una gran diferencia, porque me permitió enfocarme en aprender, disfrutar mi etapa universitaria y sentir que siempre había alguien apoyándome para alcanzar mis metas.')],
+ r:[H(6,'EMPLEABILIDAD')+P('Algo que también valoro mucho de la UTP es que no esperaron a que terminara la carrera para prepararme para el mundo laboral.')+P('Desde los primeros ciclos pude participar en programas como Mi Primer Empleo, Generación TOP, las Ferias Laborales y utilizar la Bolsa Laboral, donde aprendí a preparar mi CV, afrontar entrevistas y conocer oportunidades laborales.')+P('Además, formar parte de la UTP también significa pertenecer al ecosistema Intercorp, lo que abre muchas más oportunidades para nosotros.')+P('Todo eso hizo que hoy me sienta mucho más preparado para cuando llegue el momento de empezar mi vida profesional.')+H(8,'VIDA UNIVERSITARIA')+P('Y algo que también me gustó mucho de estudiar en la UTP fue descubrir que la universidad no es solo venir a clases.')+P('Aquí también pude participar en talleres, deportes, actividades y eventos donde conocí personas de diferentes carreras y desarrollé nuevas habilidades.')+P('Creo que eso hace que la experiencia universitaria sea mucho más completa, porque no solo creces como estudiante, sino también como persona.')],
+ f:'Fin del speech · ¡Formamos para ser líderes!'}];
+function cartHTML(fix){return CART.map(c=>`<div class="cart ${fix?'fix':''}" ${fix&&c.n===1?'style="page-break-after:always"':''}><div class="top"><span class="cara">CARA ${c.n} / 2</span><br><small>SPEECH DÍA UTP · MENTORES</small><h2>ÚLTIMO LABORATORIO</h2><span>Duración estimada: 10 a 12 minutos</span></div><hr><div class="cols"><div>${c.l}</div><div>${c.r}</div></div><hr><p class="foot" style="margin:0">${c.f}</p></div>`).join('')}
+function pdfCart(){const d=document.createElement('div');d.style.cssText='width:816px;background:#fff';d.innerHTML=cartHTML(true);savePDF(d,'Cartilla-Mentor-Ultimo-Laboratorio.pdf',false,{margin:0,html2canvas:{scale:2,backgroundColor:'#fbfaf6',windowWidth:900},pagebreak:{mode:['css']}})}
 
-/* ══ OPTIONS ══ */
-function setGroupSize(n,el){
-  groupSize=n;
-  document.querySelectorAll('#groupSize .opt-chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  updatePreview();
-}
-function setNumSections(n,el){
-  numSections=n;
-  document.querySelectorAll('#numSections .opt-chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  updatePreview();
-}
+/* Recursos: copia los archivos a la carpeta "recursos/" del repositorio (mismos nombres) y se activan solos */
+const slug=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+const VIDS=[{t:'VIDEO ÁREA SALUD',u:'recursos/video-area-salud.mp4',k:'v'},{t:'VIDEO VIENTOS QUE CAMBIAN',u:'recursos/video-vientos-que-cambian.mp4',k:'v'},{t:'VIDEO DIRECTORA DE CAMPUS',u:'recursos/video-directora-de-campus.mp4',k:'v'},{t:'PPT CIERRE',u:'recursos/ppt-cierre.pptx',k:'p'}];
+const PPTS=LABS.map(l=>({t:`${l[2]} · ${l[1]}`,u:`recursos/ppts/${slug(l[2])}.pptx`,k:"p"}));
+function resHTML(a,pre){return a.map((r,i)=>`<div class="res pend" id="${pre}${i}"><div class="rt2"><span class="tag">${r.k==='v'?'Video':'Presentación'} · Pendiente de publicar</span><b>${esc(r.t)}</b><small>${esc(r.u)}</small></div><button class="btn btn-p btn-sm" data-v aria-disabled="true">Visualizar</button><a class="btn btn-sm" aria-disabled="true" download href="${r.u}">Descargar</a><div class="pv"></div></div>`).join('')}
+async function probe(a,pre){a.forEach(async(r,i)=>{let ok=false;try{ok=(await fetch(r.u,{method:'HEAD'})).ok}catch(e){}
+ if(!ok)return;const el=$('#'+pre+i);el.classList.remove('pend');el.querySelector('.tag').textContent=r.k==='v'?'Video':'Presentación';el.querySelectorAll('[aria-disabled]').forEach(x=>x.setAttribute('aria-disabled','false'));
+ el.querySelector('[data-v]').onclick=()=>{const abs=new URL(r.u,location.href).href;if(r.k==='v')el.querySelector('.pv').innerHTML=`<video controls autoplay playsinline src="${r.u}"></video>`;else open('https://view.officeapps.live.com/op/view.aspx?src='+encodeURIComponent(abs),'_blank','noopener')}})}
+$('#resVid').innerHTML=resHTML(VIDS,'rv');$('#resPpt').innerHTML=resHTML(PPTS,'rp');$('#cartView').innerHTML=cartHTML(false);probe(VIDS,'rv');probe(PPTS,'rp');
 
-function updatePreview(){
-  const box = document.getElementById('groupPreview');
-  if(!persons.length){ box.textContent='Añade personas para ver la distribución.'; return; }
-  const total=persons.length;
-  const base=Math.floor(total/numSections);
-  const extra=total%numSections;
-  let txt=`${total} personas → ${numSections} secciones. `;
-  if(extra===0){
-    txt+=`Todos los grupos tendrán ${base} persona(s).`;
-  } else {
-    txt+=`${numSections-extra} secciones de ${base} y ${extra} sección(es) de ${base+1}.`;
-  }
-  box.textContent=txt;
-}
-
-/* ══ ADD LAB MODAL ══ */
-function openAddLab(){ document.getElementById('addLabOverlay').classList.remove('hidden'); }
-function closeAddLab(){ document.getElementById('addLabOverlay').classList.add('hidden'); }
-function confirmAddLab(){
-  const name   = document.getElementById('newLabName').value.trim();
-  const tower  = document.getElementById('newLabTower').value;
-  const floor  = document.getElementById('newLabFloor').value.trim()||'?';
-  const pending= document.getElementById('newLabPending').checked;
-  if(!name) return;
-  const colors=['#e0d7ff','#d7f0ff','#d7ffe8','#fff3d7','#ffd7e8'];
-  const color  = colors[labs.length % colors.length];
-  labs.push({id:'c_'+Date.now(), name, code:name, tower, floor, color, pending, selected:true});
-  document.getElementById('newLabName').value='';
-  document.getElementById('newLabFloor').value='';
-  document.getElementById('newLabPending').checked=false;
-  renderLabs();
-  closeAddLab();
-}
-
-/* ══ GROUP BUILDER ══ */
-function buildGroups(){
-  const noBusBus = document.getElementById('noBusBus').checked;
-  const noExtExt = document.getElementById('noExtExt').checked;
-  const noSolo   = document.getElementById('noSolo').checked;
-
-  // distribute persons into numSections sections
-  // filling from top: first extra sections get one extra person
-  const total = persons.length;
-  const base  = Math.floor(total/numSections);
-  const extra = total%numSections;
-
-  // Section sizes
-  const sizes = [];
-  for(let s=0;s<numSections;s++) sizes.push(base+(s<extra?1:0));
-
-  // Pool: try to respect restrictions when assigning
-  let pool = [...persons];
-  const groups = [];
-
-  for(let s=0;s<numSections;s++){
-    const size = sizes[s];
-    const grp  = [];
-    // pick first available respecting restrictions
-    for(let attempt=0;attempt<pool.length&&grp.length<size;attempt++){
-      const candidate = pool[attempt];
-      if(!candidate) continue;
-      const hasBus = grp.some(m=>m.type==='BUS');
-      const hasExt = grp.some(m=>m.type==='EXTERNO');
-      if(noBusBus && candidate.type==='BUS' && hasBus && grp.length>0) continue;
-      if(noExtExt && candidate.type==='EXTERNO' && hasExt && grp.length>0) continue;
-      grp.push(candidate);
-      pool.splice(attempt,1);
-      attempt=-1; // restart scan
-    }
-    // If still short (restrictions too tight), fill with whatever remains
-    while(grp.length<size && pool.length>0) grp.push(pool.shift());
-    groups.push(grp);
-  }
-  return groups;
-}
-
-/* ══ SCHEDULE ══ */
-function buildSchedule(groups, selLabs){
-  const G = groups.length;
-  const slots = selLabs.map(l=>l.id);
-  while(slots.length < G) slots.push('LIBRE');
-  const nRounds = slots.length;
-  const sched = [];
-  for(let g=0;g<G;g++){
-    sched[g]=[];
-    for(let r=0;r<nRounds;r++) sched[g][r]=slots[(g+r)%nRounds];
-  }
-  return {sched, nRounds};
-}
-
-/* ══ GENERATE ══ */
-function generate(){
-  const selLabs = labs.filter(l=>l.selected);
-  if(!selLabs.length){ alert('Selecciona al menos un laboratorio.'); return; }
-  if(!persons.length){ alert('Añade al menos un apoyo/mentor.'); return; }
-
-  const groups = buildGroups();
-  const {sched, nRounds} = buildSchedule(groups, selLabs);
-
-  _currentGroups = groups;
-  _currentSched  = sched;
-  _currentLabs   = selLabs;
-
-  renderTable(groups, selLabs, sched, nRounds);
-  document.getElementById('emptyState').style.display='none';
-  document.getElementById('resultArea').style.display='block';
-  document.getElementById('resultTitle').textContent=
-    `Recorrido · ${groups.length} secciones · ${selLabs.length} salones`;
-}
-
-/* ══ RENDER TABLE ══ */
-function renderTable(groups, selLabs, sched, nRounds){
-  const labMap = {};
-  labs.forEach(l=>labMap[l.id]=l);
-
-  let html=`<table id="schedTable"><thead><tr><th>Sección</th>`;
-  for(let r=0;r<nRounds;r++) html+=`<th>Ronda ${r+1}</th>`;
-  html+=`</tr></thead><tbody>`;
-
-  groups.forEach((grp,g)=>{
-    const names = grp.map(p=>`${p.name} <span class="badge badge-${p.type.toLowerCase()}">${p.type}</span>`).join('<br>');
-    html+=`<tr><td class="grupo-cell">${names}</td>`;
-    for(let r=0;r<nRounds;r++){
-      const lid=sched[g][r];
-      if(lid==='LIBRE'){
-        html+=`<td><div class="cell-libre" draggable="true" data-g="${g}" data-r="${r}">— libre —</div></td>`;
-      } else {
-        const lab=labMap[lid]||{code:lid,name:'',tower:'?',floor:'?',color:'#eee',pending:false};
-        html+=`<td>
-          <div class="cell-inner" draggable="true" data-g="${g}" data-r="${r}" style="background:${lab.color}">
-            <span class="cell-code">${lab.code}</span>
-            <span class="cell-name">${lab.name}</span>
-            <span class="cell-loc">Torre ${lab.tower} · ${lab.floor}</span>
-            ${lab.pending?'<span class="cell-warn">⚠ por confirmar</span>':''}
-          </div></td>`;
-      }
-    }
-    html+=`</tr>`;
-  });
-  html+=`</tbody></table>`;
-  document.getElementById('tableWrap').innerHTML=html;
-
-  // legend
-  const seen=new Set();
-  document.getElementById('legendWrap').innerHTML = selLabs.map(l=>{
-    if(seen.has(l.id)) return '';
-    seen.add(l.id);
-    return `<div class="legend-item"><div class="legend-dot" style="background:${l.color}"></div>${l.code} · ${l.name}</div>`;
-  }).join('');
-
-  initCellDrag(sched, groups, selLabs);
-}
-
-/* ══ CELL DRAG (swap rooms) ══ */
-function initCellDrag(sched, groups, selLabs){
-  let dragG=null, dragR=null;
-  document.querySelectorAll('[data-g]').forEach(el=>{
-    el.addEventListener('dragstart',e=>{
-      dragG=+el.dataset.g; dragR=+el.dataset.r;
-      e.stopPropagation();
-      el.classList.add('dragging');
-    });
-    el.addEventListener('dragend',()=>el.classList.remove('dragging'));
-    el.addEventListener('dragover',e=>{ e.preventDefault(); el.classList.add('drag-over'); });
-    el.addEventListener('dragleave',()=>el.classList.remove('drag-over'));
-    el.addEventListener('drop',e=>{
-      e.preventDefault(); el.classList.remove('drag-over');
-      const tG=+el.dataset.g, tR=+el.dataset.r;
-      if(dragG===null||(dragG===tG&&dragR===tR)) return;
-      [sched[dragG][dragR], sched[tG][tR]] = [sched[tG][tR], sched[dragG][dragR]];
-      renderTable(groups, selLabs, sched, sched[0].length);
-      dragG=dragR=null;
-    });
-
-    // touch
-    let tSrc=null;
-    el.addEventListener('touchstart',e=>{ tSrc={g:+el.dataset.g,r:+el.dataset.r}; el.style.opacity='.5'; },{passive:true});
-    el.addEventListener('touchend',e=>{
-      el.style.opacity='';
-      const t=e.changedTouches[0];
-      const dest=document.elementFromPoint(t.clientX,t.clientY)?.closest('[data-g]');
-      if(!dest||!tSrc) return;
-      const tG=+dest.dataset.g, tR=+dest.dataset.r;
-      if(tSrc.g===tG&&tSrc.r===tR) return;
-      [sched[tSrc.g][tSrc.r], sched[tG][tR]] = [sched[tG][tR], sched[tSrc.g][tSrc.r]];
-      renderTable(groups, selLabs, sched, sched[0].length);
-      tSrc=null;
-    },{passive:true});
-  });
-}
-
-/* ══ PDF ══ */
-function printPDF(){ window.print(); }
-
-/* ══ INIT ══ */
-renderLabs();
-renderPersons();
-updatePreview();
+renderLabs();renderPersons();djPrev();
 </script>
 </body>
 </html>
