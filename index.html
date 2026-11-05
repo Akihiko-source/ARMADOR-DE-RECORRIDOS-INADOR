@@ -141,9 +141,9 @@ td.gc{min-width:150px;padding:8px;background:#1d1718;position:sticky;left:0;z-in
  <div class="canvas">
   <div class="empty" id="empty">Selecciona salones, añade apoyos<br>y pulsa Generar recorrido</div>
   <div id="result" style="display:none">
-   <div class="tb"><h2 id="rTitle"></h2><button class="btn btn-sm" onclick="generate()">Regenerar</button><button class="btn btn-sm" onclick="exportDoc('img')">Imagen</button><button class="btn btn-p btn-sm" onclick="exportDoc('pdf')">PDF completo</button></div>
+   <div class="tb"><h2 id="rTitle"></h2><button class="btn btn-sm" onclick="generate()">Regenerar</button><button class="btn btn-sm" onclick="exportDoc('sched','img')">Imagen recorrido</button><button class="btn btn-p btn-sm" onclick="exportDoc('sched','pdf')">PDF recorrido</button></div>
    <div class="tw" id="tw"></div><div class="legend" id="legend"></div>
-   <div class="sect"><div class="tb"><h3>Roles de los mentores</h3></div>
+   <div class="sect"><div class="tb"><h3>Roles de los mentores</h3><button class="btn btn-sm" onclick="exportDoc('roles','img')">Imagen roles</button><button class="btn btn-p btn-sm" onclick="exportDoc('roles','pdf')">PDF roles</button></div>
     <div id="roles"></div><p class="hint">Con los botones Salón y Auditorio cambias a mano quién da cada charla.</p></div>
   </div>
  </div>
@@ -293,7 +293,7 @@ async function savePDF(node,filename,land,opt){
   o.html2canvas={scale:2,backgroundColor:'#fff',scrollX:0,scrollY:0};
   await deliver(await html2pdf().set(o).from(node).outputPdf('blob'),filename);
  }catch(e){if(e&&e.code==='declined')return;toast('No se pudo generar el PDF')}}
-/* Exportación vectorial única: se dibuja con texto y formas (no es captura) */
+/* Exportación vectorial: se dibuja con texto y formas (no es captura). Recorrido y Roles se exportan por separado */
 const COL={bus:'#2a7fd4',campus:'#2f9e5b',externo:'#d03a30'},INK='#1a1a1a',DR='#7a0e13',RD='#c8161d';
 function shade(h,k){const n=parseInt(h.slice(1),16),f=c=>Math.max(0,Math.min(255,Math.round(c*(1+k))));return '#'+[(n>>16)&255,(n>>8)&255,n&255].map(f).map(v=>v.toString(16).padStart(2,'0')).join('')}
 function painterPDF(doc,Wd,Hd){return{
@@ -312,8 +312,8 @@ function wrapT(P,t,w,s,b){const o=[];let cur='';String(t).split(/\s+/).forEach(w
 function fitS(P,t,w,s,b,min){while(s>min&&P.tw(t,s,b)>w)s-=.25;return s}
 function fitT(P,t,w,s,b,min){s=fitS(P,t,w,s,b,min);if(P.tw(t,s,b)<=w)return[t,s];while(t.length>1&&P.tw(t+'...',s,b)>w)t=t.slice(0,-1);return[t+'...',s]}
 function pill(P,x,y,h,t,s,fill,c,right){const w=P.tw(t,s,1)+h*.9,xx=right?x-w:x;P.rrect(xx,y,w,h,h/2,{fill});P.text(t,xx+w/2,y+h/2+s*.35,{s,b:1,c,a:'center'});return w}
-function drawHead(P,Wd){P.rect(0,0,Wd,58,{fill:'#14100f'});P.rect(0,58,Wd,3,{fill:RD});P.text('Recorrido completo · Día UTP',24,30,{s:19,b:1,c:'#fff'});P.text('APP Apoyo Día UTP',24,46,{s:8.5,c:'#c9a35f'});
- P.text(`${groups.length} grupos · ${uLabs().length} salones · ${persons.length} mentores`,Wd-24,36,{s:9,b:1,c:'#fff',a:'right'});return 82}
+function drawHead(P,Wd,part){const isS=part==='sched';P.rect(0,0,Wd,58,{fill:'#14100f'});P.rect(0,58,Wd,3,{fill:RD});P.text(isS?'Recorrido · Día UTP':'Roles de los mentores · Día UTP',24,30,{s:19,b:1,c:'#fff'});P.text('APP Apoyo Día UTP',24,46,{s:8.5,c:'#c9a35f'});
+ P.text(isS?`${groups.length} grupos · ${uLabs().length} salones`:`${groups.length} grupos · ${persons.length} mentores`,Wd-24,36,{s:9,b:1,c:'#fff',a:'right'});return 82}
 function secT(P,Wd,M,y,Hd,t){if(y+46>Hd-M){P.page();y=M}const T=t.toUpperCase();P.rrect(M,y,4,13,1.5,{fill:RD});P.text(T,M+11,y+10.5,{s:10.5,b:1,c:DR});const w=P.tw(T,10.5,1);P.rect(M+20+w,y+6,Wd-2*M-20-w,.8,{fill:'#e3d9d3'});return y+26}
 function drawSchedule(P,Wd,Hd,y,M){const N=sched[0].length,gw=132,cw=(Wd-2*M-gw)/N,fs=Math.max(6.5,Math.min(9,cw/8.5)),map={};labs.forEach(l=>map[l.id]=l);
  const hdr=()=>{P.rrect(M,y,gw-3,22,5,{fill:DR});P.text('GRUPO',M+(gw-3)/2,y+14.5,{s:8,b:1,c:'#fff',a:'center'});for(let r=0;r<N;r++){const x=M+gw+r*cw;P.rrect(x+1.5,y,cw-3,22,5,{fill:DR});P.text('RONDA '+(r+1),x+cw/2,y+14.5,{s:8,b:1,c:'#fff',a:'center'})}y+=28};hdr();
@@ -352,13 +352,15 @@ function drawRoles(P,Wd,Hd,y,M){const TW=Wd-2*M,gap=12;
  if(cardsP){y=secT(P,Wd,M,y,Hd,'Armar cards y traer fichas');const d=wrapT(P,'Preparar antes de empezar el día las cards (tarjetas que se entregan al finalizar el recorrido).',TW-40,8.5,0),h=34+d.length*11;if(y+h>Hd-M){P.page();y=M}
   P.rrect(M,y,TW,h,8,{fill:'#fff6d6',stroke:'#f2b705',lw:1});P.rrect(M,y,6,h,3,{fill:'#f2b705'});P.text(cardsP.name,M+18,y+20,{s:13,b:1,c:'#3a2a00'});pill(P,M+TW-12,y+8,15,'CAMPUS',7.5,COL.campus,'#fff',1);d.forEach((t,k)=>P.text(t,M+18,y+35+k*11,{s:8.5,c:'#5a4400'}));y+=h+10}
  return y}
-function drawFull(P,Wd,Hd){const M=24;let y=drawHead(P,Wd);y=drawSchedule(P,Wd,Hd,y,M)+16;return drawRoles(P,Wd,Hd,y,M)+M}
-function exportDoc(fmt){if(!groups.length)return;const Wd=Math.max(792,48+132+sched[0].length*84),Hd=Wd*612/792,name='Recorrido-Completo-Dia-UTP';
+/* Un documento por parte: 'sched' = recorrido, 'roles' = asignación de roles */
+function drawPart(P,Wd,Hd,part){const M=24;let y=drawHead(P,Wd,part);y=part==='sched'?drawSchedule(P,Wd,Hd,y,M):drawRoles(P,Wd,Hd,y,M);return y+M}
+function exportDoc(part,fmt){if(!groups.length)return;
+ const Wd=part==='sched'?Math.max(792,48+132+sched[0].length*84):792,Hd=Wd*612/792,name=part==='sched'?'Recorrido-Dia-UTP':'Roles-Mentores-Dia-UTP';
  if(fmt==='pdf'){const J=window.jspdf&&window.jspdf.jsPDF;if(!J)return toast('No se pudo cargar el generador de PDF');
-  const doc=new J({unit:'pt',format:[Wd,Hd],orientation:'landscape'});drawFull(painterPDF(doc,Wd,Hd),Wd,Hd);deliver(doc.output('blob'),name+'.pdf')}
+  const doc=new J({unit:'pt',format:[Wd,Hd],orientation:'landscape'});drawPart(painterPDF(doc,Wd,Hd),Wd,Hd,part);deliver(doc.output('blob'),name+'.pdf')}
  else{const nop={...painterCV(document.createElement('canvas').getContext('2d')),rect(){},rrect(){},text(){},page(){}};
-  const H=Math.ceil(drawFull(nop,Wd,1e9)),k=2,cv=document.createElement('canvas');cv.width=Wd*k;cv.height=H*k;const ctx=cv.getContext('2d');ctx.scale(k,k);ctx.fillStyle='#fff';ctx.fillRect(0,0,Wd,H);
-  drawFull(painterCV(ctx),Wd,1e9);cv.toBlob(b=>deliver(b,name+'.png'),'image/png')}}
+  const H=Math.ceil(drawPart(nop,Wd,1e9,part)),k=2,cv=document.createElement('canvas');cv.width=Wd*k;cv.height=H*k;const ctx=cv.getContext('2d');ctx.scale(k,k);ctx.fillStyle='#fff';ctx.fillRect(0,0,Wd,H);
+  drawPart(painterCV(ctx),Wd,1e9,part);cv.toBlob(b=>deliver(b,name+'.png'),'image/png')}}
 
 /* Declaración Jurada: réplica fiel del Word (carta, Verdana/Tahoma 10 pt, 2 páginas) */
 const DJCSS=`.pg{width:816px;height:1054px;padding:50px 112px 0;background:#fff;color:#000;font:11pt/1.45 Helvetica,Arial,sans-serif;text-align:justify;box-sizing:border-box}.pg p{margin:0}.pg .t{font-weight:700}.pg .it{display:flex;margin-top:22px}.pg .it>i{width:34px;flex:none;font-style:normal}.pg .it>div{flex:1}.pg .bl p{text-align:left;padding-left:9px;text-indent:-9px;margin-bottom:2px}.pg .sg{margin-top:22px}.pg u{text-decoration:underline}`;
