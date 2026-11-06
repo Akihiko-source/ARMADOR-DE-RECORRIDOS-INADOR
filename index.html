@@ -101,6 +101,7 @@ td.gc{min-width:150px;padding:8px;background:#1d1718;position:sticky;left:0;z-in
 .rcb+.rcb{margin-top:40px;padding-top:26px;border-top:3px solid var(--bronze)}
 th small{display:block;font:500 9px var(--bd);letter-spacing:0;text-transform:none;opacity:.85;margin-top:2px}
 .rcfg{border:1px solid var(--line);border-radius:3px;padding:10px;margin-bottom:8px;background:#120d0e}
+.chips.sm{max-height:120px;overflow-y:auto;gap:5px}.chips.sm .chip{padding:6px 9px;font-size:10px;letter-spacing:.5px}
 .mut{color:var(--muted)}
 .aud{display:flex;flex-direction:column;gap:4px;padding:14px 16px;margin-bottom:14px;background:linear-gradient(#1a1213,#0d0a0a);border:2px solid var(--bronze);border-left:8px solid var(--red);border-radius:6px}.aud small{font:700 10px var(--hd);letter-spacing:1.5px;color:var(--bronze-l)}.aud div{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.aud b{font:700 20px var(--hd);word-break:break-word}
 .gcards,.lcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr));gap:12px}
@@ -121,20 +122,25 @@ th small{display:block;font:500 9px var(--bd);letter-spacing:0;text-transform:no
 
 <section class="tab on" id="tab-rec"><div class="app">
  <div class="panel">
-  <div class="card"><div class="st">I · Laboratorios y salones</div>
+  <div class="card"><div class="st">I · Colegios del día</div>
+   <label>Cantidad de colegios (recorridos)</label>
+   <select id="cfgR" onchange="renderRcfg()"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select>
+   <div class="hint">Con más de un colegio podrás elegir los apoyos, los salones y los mentores por grupo de cada uno. Con uno solo todo queda como antes.</div>
+   <div id="rcfg" style="margin-top:12px"></div>
+   <div class="row"><div><label>Min. por laboratorio</label><input type="number" id="cfgMin" value="10" min="1" inputmode="numeric" oninput="rcInfo()"></div></div>
+   <div class="info" id="rinfo" style="margin-top:10px"></div></div>
+  <div class="card"><div class="st">II · Laboratorios y salones</div>
    <div class="labs" id="labsGrid"></div>
    <button class="btn btn-sm btn-full" style="margin-top:10px;padding:9px" onclick="$('#addLab').classList.remove('h');ncode()">+ Nuevo salón</button></div>
-  <div class="card"><div class="st">II · Apoyos y mentores</div>
+  <div class="card"><div class="st">III · Apoyos y mentores</div>
    <div class="row" style="margin-bottom:10px">
     <div><label>Nombre</label><input type="text" id="pName" placeholder="Nombre" onkeydown="if(event.key==='Enter')addPerson()"></div>
     <div style="max-width:118px"><label>Tipo</label><select id="pType"><option>BUS</option><option>CAMPUS</option><option>EXTERNO</option></select></div>
     <div style="max-width:50px"><button class="btn btn-p" style="width:100%" onclick="addPerson()">+</button></div></div>
    <div class="plist" id="plist"></div></div>
-  <div class="card"><div class="st">III · Configuración</div>
-   <label>Tamaño de grupo</label>
-   <div class="chips" id="gs"><div class="chip" data-n="1">Individual</div><div class="chip on" data-n="2">Parejas</div><div class="chip" data-n="3">Tríos</div><div class="chip" data-n="4">Cuarteto</div><div class="chip" data-n="5">Quinteto</div></div>
-   <div class="row" style="margin-top:14px"><div><label>Cantidad de grupos</label><select id="cfgG" onchange="preview()"><option value="">Automático</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></div><div><label>Mentores por grupo</label><select id="cfgS" onchange="preview()"><option value="">Automático</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div></div>
-   <div class="hint" style="margin-top:6px">En «Automático» se usa el tamaño de grupo de arriba.</div>
+  <div class="card"><div class="st">IV · Configuración</div>
+   <div class="row" style="margin-top:14px"><div><label>Cantidad de grupos</label><select id="cfgG" onchange="preview()"><option value="">Automático</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></div><div><label>Mentores por grupo</label><select id="cfgS" onchange="preview()"><option value="">Automático</option><option value="1">1 · individual</option><option value="2">2 · pareja</option><option value="3">3 · trío</option><option value="4">4 · cuarteto</option><option value="5">5 · quinteto</option><option value="6">6 · sexteto</option></select></div></div>
+   <div class="hint" style="margin-top:6px">En «Automático» se forman parejas, o se reparte parejo según la cantidad de grupos.</div>
    <label style="margin-top:14px">Restricciones de grupo</label>
    <label class="ck"><input type="checkbox" id="noBusBus" checked>BUS no van juntos</label>
    <label class="ck"><input type="checkbox" id="noExtExt" checked>EXTERNO no van juntos</label>
@@ -142,12 +148,6 @@ th small{display:block;font:500 9px var(--bd);letter-spacing:0;text-transform:no
    <label class="ck"><input type="checkbox" id="noBusTalk" checked>No sea BUS quien dé la charla</label>
    <label class="ck"><input type="checkbox" id="noExtTalk" checked>No sea EXTERNO quien dé la charla</label>
    <div class="info" id="prev" style="margin-top:10px">Añade personas para ver la distribución.</div></div>
-  <div class="card"><div class="st">IV · Recorridos del día</div>
-   <label>Cantidad de recorridos</label>
-   <select id="cfgR" onchange="renderRcfg()"><option>1</option><option>2</option><option>3</option><option>4</option></select>
-   <div id="rcfg" style="margin-top:12px"></div>
-   <div class="row"><div><label>Min. por laboratorio</label><input type="number" id="cfgMin" value="10" min="1" inputmode="numeric" oninput="rcInfo()"></div><div><label>Min. de traslado</label><input type="number" id="cfgTr" value="5" min="0" inputmode="numeric" oninput="rcInfo()"></div></div>
-   <div class="info" id="rinfo" style="margin-top:10px"></div></div>
   <button class="btn btn-p btn-full" onclick="generate()">Generar recorrido</button>
  </div>
  <div class="canvas">
@@ -218,7 +218,7 @@ let labs=LABS.map(l=>({id:l[0],name:l[1],code:l[2],tower:l[3],floor:l[4],color:l
 let persons=store.get('aud_persons',[]),gsize=2,groups=[],sched=[],selLabs=[],aud=null,spk=[];
 const MES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 
-function renderLabs(){$('#labsGrid').innerHTML=labs.map((l,i)=>`<div class="lab ${l.selected?'sel':''}" onclick="labs[${i}].selected=!labs[${i}].selected;renderLabs()"><div class="dot" style="background:${l.color}"></div><div><b>${esc(l.code)} · ${esc(l.name)}</b><small>Torre ${esc(l.tower)} · ${esc(l.floor)}</small></div></div>`).join('')}
+function renderLabs(){$('#labsGrid').innerHTML=labs.map((l,i)=>`<div class="lab ${l.selected?'sel':''}" onclick="labs[${i}].selected=!labs[${i}].selected;renderLabs()"><div class="dot" style="background:${l.color}"></div><div><b>${esc(l.code)} · ${esc(l.name)}</b><small>Torre ${esc(l.tower)} · ${esc(l.floor)}</small></div></div>`).join('');if($('#rcfg'))renderRcfg()}
 const pad2=n=>String(n).padStart(2,'0');
 function ncode(){const c=$('#nl_t').value+pad2(+$('#nl_f').value||0)+pad2(+$('#nl_s').value||0);$('#nl_code').innerHTML=`Código: <b>${c}</b> (torre + piso de 2 dígitos + salón de 2 dígitos)<br>Ejemplo: A0103 = Torre A, piso 1, salón 3.`;return c}
 function confirmLab(){const f=$('#nl_f').value.trim(),n=$('#nl_s').value.trim();if(!/^\d{1,2}$/.test(f)||!/^\d{1,2}$/.test(n))return toast('Indica piso y número de salón (solo números)');const c=ncode(),cs=['#e0d7ff','#d7f0ff','#d7ffe8','#fff3d7','#ffd7e8'];
@@ -227,10 +227,9 @@ function confirmLab(){const f=$('#nl_f').value.trim(),n=$('#nl_s').value.trim();
 function renderPersons(){
  $('#plist').innerHTML=persons.map((p,i)=>`<div class="pitem" data-pi="${i}"><span class="grip"></span><span class="n">${esc(p.name)}</span><span class="badge b-${p.type.toLowerCase()}">${p.type}</span><button class="x" onclick="persons.splice(${i},1);renderPersons()">×</button></div>`).join('');
  dragify('.pitem',(a,b)=>{const m=persons.splice(+a.dataset.pi,1)[0];persons.splice(+b.dataset.pi,0,m);renderPersons()});
- store.set('aud_persons',persons);preview()}
+ store.set('aud_persons',persons);preview();if($('#rcfg'))renderRcfg()}
 function addPerson(){const n=$('#pName').value.trim();if(!n)return;persons.push({name:n,type:$('#pType').value});$('#pName').value='';renderPersons()}
-document.querySelectorAll('#gs .chip').forEach(c=>c.onclick=()=>{document.querySelectorAll('#gs .chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');gsize=+c.dataset.n;preview()});
-function preview(){const n=persons.length;if(!n){$('#prev').textContent='Añade personas para ver la distribución.';return}const z=planG(),g=z.length,tot=z.reduce((a,b)=>a+b,0),c={};z.forEach(v=>c[v]=(c[v]||0)+1);const ks=Object.keys(c),t=ks.length===1?`Todos de ${ks[0]}.`:ks.map(v=>`${c[v]} de ${v}`).join(' y ')+'.';$('#prev').textContent=`${n} personas, ${g} grupo(s). `+t+(tot<n?` Sobran ${n-tot} sin grupo.`:tot>n?` Faltan ${tot-n} personas para completar.`:'')}
+function preview(){const n=persons.length;if(!n){$('#prev').textContent='Añade personas para ver la distribución.';return}const z=planG(persons.length),g=z.length,tot=z.reduce((a,b)=>a+b,0),c={};z.forEach(v=>c[v]=(c[v]||0)+1);const ks=Object.keys(c),t=ks.length===1?`Todos de ${ks[0]}${SZN[ks[0]]?' ('+SZN[ks[0]]+')':''}.`:ks.map(v=>`${c[v]} de ${v}${SZN[v]?' ('+SZN[v]+')':''}`).join(' y ')+'.';$('#prev').textContent=`${n} personas, ${g} grupo(s). `+t+(tot<n?` Sobran ${n-tot} sin grupo.`:tot>n?` Faltan ${tot-n} personas para completar.`:'')}
 
 /* Arrastre con copia que sigue el dedo */
 let D=null,hot=null;
@@ -248,48 +247,76 @@ document.addEventListener('pointercancel',endDrag);
 document.addEventListener('touchmove',e=>{if(D&&D.on&&e.cancelable)e.preventDefault()},{passive:false});
 
 /* Grupos, horario y charlas */
-function planG(){const n=persons.length,gv=+$('#cfgG').value||0,sv=+$('#cfgS').value||0;let G=gv||Math.ceil(n/(sv||gsize));G=Math.max(1,Math.min(G,n||1));const z=[];
+function planG(n,sz){const gv=+$('#cfgG').value||0,sv=+(sz||$('#cfgS').value)||0;let G=gv||Math.ceil(n/(sv||gsize));G=Math.max(1,Math.min(G,n||1));const z=[];
  if(gv&&sv){for(let s=0;s<G;s++)z.push(sv)}else{const b=Math.floor(n/G),e=n%G;for(let s=0;s<G;s++)z.push(b+(s<e?1:0))}return z}
-function buildGroups(){const nb=$('#noBusBus').checked,ne=$('#noExtExt').checked,sizes=planG(),G=sizes.length,pool=[...persons],out=[];
+function buildGroups(list,sz){list=list||persons;const nb=$('#noBusBus').checked,ne=$('#noExtExt').checked,sizes=planG(list.length,sz),G=sizes.length,pool=[...list],out=[];
  for(let s=0;s<G;s++){const size=sizes[s],grp=[];
   for(let i=0;i<pool.length&&grp.length<size;i++){const c=pool[i];if(nb&&c.type==='BUS'&&grp.some(m=>m.type==='BUS'))continue;if(ne&&c.type==='EXTERNO'&&grp.some(m=>m.type==='EXTERNO'))continue;grp.push(c);pool.splice(i,1);i=-1}
   while(grp.length<size&&pool.length)grp.push(pool.shift());if(grp.length)out.push(grp)}return out}
 function buildSched(G,L){const s=L.map(l=>l.id);while(s.length<G)s.push('LIBRE');const N=s.length;return Array.from({length:G},(_,g)=>Array.from({length:N},(_,r)=>s[(g+r)%N]))}
 function eligible(l){const nb=$('#noBusTalk').checked,ne=$('#noExtTalk').checked,f=l.filter(p=>!(nb&&p.type==='BUS')&&!(ne&&p.type==='EXTERNO'));return f.length?f:l}
 function pick(l){const w=l.map(p=>p.type==='BUS'?.25:1);let r=Math.random()*w.reduce((a,b)=>a+b,0);for(let i=0;i<l.length;i++){r-=w[i];if(r<=0)return l[i]}return l[l.length-1]}
-let RC=[],K=0,TMS=null,RCF={items:[],end:''};
-function useRC(k){K=k;const s=RC[k];groups=s.groups;sched=s.sched;selLabs=s.labs;aud=s.aud;spk=s.spk;rev=s.rev;cardsP=s.cardsP;TMS=s.times}
+let RC=[],K=0,TMS=null,POOL=[],RCF={items:[],end:''};
+function useRC(k){K=k;const s=RC[k];groups=s.groups;sched=s.sched;selLabs=s.labs;aud=s.aud;spk=s.spk;rev=s.rev;cardsP=s.cardsP;TMS=s.times;POOL=s.pool}
 function saveRC(k){const s=RC[k];s.groups=groups;s.sched=sched;s.aud=aud;s.spk=spk;s.rev=rev;s.cardsP=cardsP}
 const minsOf=t=>{if(!t)return null;const p=t.split(':');return +p[0]*60+ +p[1]};
 const hhmm=m=>pad2(Math.floor(m/60)%24)+':'+pad2(m%60);
 const slug=t=>String(t).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
-function rcfgSave(){const n=document.querySelectorAll('.rcfg[data-i]').length;for(let i=0;i<n;i++)RCF.items[i]={school:$('#rc_s'+i).value.trim(),start:$('#rc_t'+i).value};const e=$('#rc_end');if(e)RCF.end=e.value;rcInfo()}
+const SZN={1:'individual',2:'pareja',3:'trío',4:'cuarteto',5:'quinteto',6:'sexteto'};
+const szOpts=(first,sel)=>`<option value="">${first}</option>`+[1,2,3,4,5,6].map(v=>`<option value="${v}" ${String(sel||'')===String(v)?'selected':''}>${v} · ${SZN[v]}</option>`).join('');
+/* Traslados referenciales: entre torres ~7 min, mismo piso ~2 min, entre pisos 3 a 5 min según cuántos pisos */
+const flN=l=>{const f=String(l.floor||'');if(/^s[oó]tano$/i.test(f))return -1;if(/^semis/i.test(f))return 0;const m=f.match(/\d+/);return m?+m[0]:null};
+function trans(a,b){if(!a||!b||a.id===b.id)return 0;const ta=a.tower,tb=b.tower;if((ta==='A'||ta==='B')&&(tb==='A'||tb==='B')&&ta!==tb)return 7;const fa=flN(a),fb=flN(b);if(fa==null||fb==null)return 4;const d=Math.abs(fa-fb);return d===0?2:d===1?3:d===2?4:5}
+/* Cada ronda arranca cuando termina el traslado más largo entre todos los grupos */
+function timeline(S,mn){const N=S[0].length,last=S.map(()=>null),mp={};labs.forEach(l=>mp[l.id]=l);const st=[0];
+ for(let r=0;r<N;r++){if(r>0){let t=0;S.forEach((row,g)=>{const id=row[r];if(id!=='LIBRE'&&last[g])t=Math.max(t,trans(last[g],mp[id]))});st.push(st[r-1]+mn+t)}
+  S.forEach((row,g)=>{if(row[r]!=='LIBRE')last[g]=mp[row[r]]})}
+ return st}
+const rcItem=i=>RCF.items[i]||(RCF.items[i]={});
+function rcfgSave(){const n=document.querySelectorAll('.rcfg[data-i]').length;for(let i=0;i<n;i++){const it=rcItem(i),z=$('#rc_z'+i);it.school=$('#rc_s'+i).value.trim();it.start=$('#rc_t'+i).value;it.sz=z?z.value:(it.sz||'')}const e=$('#rc_end');if(e)RCF.end=e.value;rcInfo()}
+function togP(i,x){rcfgSave();const it=rcItem(i),nm=persons[x].name,o=it.off||(it.off=[]),j=o.indexOf(nm);if(j<0)o.push(nm);else o.splice(j,1);renderRcfg()}
+function togL(i,id){rcfgSave();const it=rcItem(i);if(!it.labs)it.labs=labs.filter(l=>l.selected).map(l=>l.id);const j=it.labs.indexOf(id);if(j<0)it.labs.push(id);else it.labs.splice(j,1);renderRcfg()}
+function rcAll(i,k,on){rcfgSave();const it=rcItem(i);if(k==='p')it.off=on?[]:persons.map(p=>p.name);else it.labs=on?labs.map(l=>l.id):[];renderRcfg()}
 function renderRcfg(){rcfgSave();const n=+$('#cfgR').value;let h='';
- for(let i=0;i<n;i++){const c=RCF.items[i]||{};h+=`<div class="rcfg" data-i="${i}"><label>Recorrido ${i+1} · Colegio</label><input type="text" id="rc_s${i}" placeholder="Nombre del colegio" value="${esc(c.school||'')}" oninput="rcfgSave()"><div style="margin-top:8px"><label>Hora de inicio</label><input type="time" id="rc_t${i}" value="${c.start||''}" oninput="rcfgSave()"></div></div>`}
+ for(let i=0;i<n;i++){const it=rcItem(i);h+=`<div class="rcfg" data-i="${i}"><label>Recorrido ${i+1} · Colegio</label><input type="text" id="rc_s${i}" placeholder="Nombre del colegio" value="${esc(it.school||'')}" oninput="rcfgSave()"><div style="margin-top:8px"><label>Hora de inicio</label><input type="time" id="rc_t${i}" value="${it.start||''}" oninput="rcfgSave()"></div>`;
+  if(n>1){const on=new Set(it.labs||labs.filter(l=>l.selected).map(l=>l.id)),off=it.off||[];
+   h+=`<div style="margin-top:8px"><label>Mentores por grupo</label><select id="rc_z${i}" onchange="rcfgSave()">${szOpts('General',it.sz)}</select></div>`
+    +`<div style="margin-top:8px"><div style="display:flex;justify-content:space-between;align-items:center"><label style="margin:0">Apoyos de este colegio</label><span><button class="mini" onclick="rcAll(${i},'p',1)">Todos</button><button class="mini" onclick="rcAll(${i},'p',0)">Ninguno</button></span></div><div class="chips sm" style="margin-top:6px">${persons.length?persons.map((p,x)=>`<div class="chip ${off.includes(p.name)?'':'on'}" onclick="togP(${i},${x})">${esc(p.name)} · ${p.type}</div>`).join(''):'<small class="mut">Añade apoyos en el paso III</small>'}</div></div>`
+    +`<div style="margin-top:8px"><div style="display:flex;justify-content:space-between;align-items:center"><label style="margin:0">Salones de este colegio</label><span><button class="mini" onclick="rcAll(${i},'l',1)">Todos</button><button class="mini" onclick="rcAll(${i},'l',0)">Ninguno</button></span></div><div class="chips sm" style="margin-top:6px">${labs.map(l=>`<div class="chip ${on.has(l.id)?'on':''}" onclick="togL(${i},'${l.id}')">${esc(l.code)}</div>`).join('')}</div></div>`}
+  h+='</div>'}
  h+=`<div class="rcfg"><label>Hora de término ${n>1?'del último recorrido':'del recorrido'}</label><input type="time" id="rc_end" value="${RCF.end||''}" oninput="rcfgSave()"></div>`;$('#rcfg').innerHTML=h;rcInfo()}
-function rcWin(i,n){const s=minsOf((RCF.items[i]||{}).start);if(s==null)return null;const e=i<n-1?minsOf((RCF.items[i+1]||{}).start):minsOf(RCF.end);if(e==null)return null;return{s,e,d:e-s}}
-function nLabsFor(d){const m=+$('#cfgMin').value||10,t=Math.max(0,+$('#cfgTr').value||0);return Math.floor((d+t)/(m+t))}
-function rcInfo(){const n=+$('#cfgR').value,o=[];for(let i=0;i<n;i++){const w=rcWin(i,n);o.push(`<b>Recorrido ${i+1}:</b> `+(w?(w.d>0?`${w.d} min → ${nLabsFor(w.d)} laboratorios`:'revisa las horas'):'sin horario (usa todos los salones seleccionados)'))}
- $('#rinfo').innerHTML=o.join('<br>')+`<br><small class="mut">${+$('#cfgMin').value||10} min por laboratorio + ${Math.max(0,+$('#cfgTr').value||0)} min de traslado.</small>`}
-function generate(){rcfgSave();const sel=labs.filter(l=>l.selected);if(!sel.length)return toast('Selecciona al menos un salón');if(!persons.length)return toast('Añade al menos un apoyo');
- const n=+$('#cfgR').value,mn=+$('#cfgMin').value||10,tr=Math.max(0,+$('#cfgTr').value||0),out=[];
- for(let i=0;i<n;i++){const w=rcWin(i,n);let LL=sel,cap=null;
-  if(w){if(w.d<=0)return toast(`Revisa las horas del recorrido ${i+1}`);cap=nLabsFor(w.d);if(cap<1)return toast(`El recorrido ${i+1} no alcanza para un laboratorio`);if(cap<sel.length)LL=sel.slice(0,cap)}
-  selLabs=LL;groups=buildGroups();sched=buildSched(groups.length,LL);aud=pick(eligible(persons));spk=groups.map(g=>{const c=g.filter(p=>p!==aud);return pick(eligible(c.length?c:g))});rev={};cardsP=null;assignExtras(true);
-  const N=sched[0].length,times=w?Array.from({length:N},(_,r)=>{const a=w.s+r*(mn+tr);return hhmm(a)+' – '+hhmm(a+mn)}):null;
-  out.push({school:(RCF.items[i]||{}).school||'',start:w?hhmm(w.s):'',endT:w?hhmm(w.e):'',labs:LL,groups,sched,aud,spk,rev,cardsP,times,cap,avail:sel.length})}
+function rcWin(i,n){const s=minsOf((rcItem(i)).start);if(s==null)return null;const e=i<n-1?minsOf((rcItem(i+1)).start):minsOf(RCF.end);if(e==null)return null;return{s,e,d:e-s}}
+const rcPool=(i,n)=>{const it=rcItem(i);return n>1?persons.filter(p=>!(it.off||[]).includes(p.name)):persons};
+const rcLabs=(i,n)=>{const it=rcItem(i);return n>1&&it.labs?labs.filter(l=>it.labs.includes(l.id)):labs.filter(l=>l.selected)};
+/* Plan de un colegio: apoyos, salones, grupos y cuántos laboratorios caben según horario y traslados */
+function rcPlan(i,n){const it=rcItem(i),list=rcPool(i,n),all=rcLabs(i,n),w=rcWin(i,n),mn=+$('#cfgMin').value||10,o={w,list,all,groups:[],cap:null,labs:all,err:''};
+ if(!all.length){o.err='sin salones';return o}
+ if(!list.length){o.err='sin apoyos';return o}
+ o.groups=buildGroups(list,n>1?it.sz:'');
+ if(w){if(w.d<=0){o.err='revisa las horas';return o}
+  let best=0;for(let c=1;c<=all.length;c++){const st=timeline(buildSched(o.groups.length,all.slice(0,c)),mn);if(st[st.length-1]+mn<=w.d)best=c}
+  if(!best){o.err='el horario no alcanza';return o}o.cap=best;o.labs=best<all.length?all.slice(0,best):all}
+ return o}
+function rcInfo(){const n=+$('#cfgR').value,o=[];for(let i=0;i<n;i++){const p=rcPlan(i,n);o.push(`<b>Recorrido ${i+1}:</b> `+(p.err?`<span style="color:#f2b705">${p.err}</span>`:p.w?`${p.w.d} min → ${p.labs.length} laboratorios`:'sin horario (usa todos sus salones)'))}
+ $('#rinfo').innerHTML=o.join('<br>')+`<br><small class="mut">${+$('#cfgMin').value||10} min por laboratorio. Traslado (referencial, ya incluido en el horario): entre torres ~7 min · mismo piso ~2 min · entre pisos 3 a 5 min.</small>`}
+function generate(){rcfgSave();const n=+$('#cfgR').value,mn=+$('#cfgMin').value||10,out=[];
+ for(let i=0;i<n;i++){const p=rcPlan(i,n);
+  if(p.err){const e1={'sin salones':n>1?`El recorrido ${i+1} no tiene salones`:'Selecciona al menos un salón','sin apoyos':n>1?`El recorrido ${i+1} no tiene apoyos`:'Añade al menos un apoyo','revisa las horas':`Revisa las horas del recorrido ${i+1}`,'el horario no alcanza':`El horario del recorrido ${i+1} no alcanza ni para un laboratorio`};return toast(e1[p.err])}
+  const w=p.w;POOL=p.list;selLabs=p.labs;groups=p.groups;sched=buildSched(groups.length,p.labs);aud=pick(eligible(POOL));spk=groups.map(g=>{const c=g.filter(q=>q!==aud);return pick(eligible(c.length?c:g))});rev={};cardsP=null;assignExtras(true);
+  const st=timeline(sched,mn),times=w?st.map(x=>hhmm(w.s+x)+' – '+hhmm(w.s+x+mn)):null;
+  out.push({school:rcItem(i).school||'',start:w?hhmm(w.s):'',endT:w?hhmm(w.e):'',labs:p.labs,groups,sched,aud,spk,rev,cardsP,times,cap:p.cap,avail:p.all.length,pool:p.list})}
  RC=out;$('#empty').style.display='none';$('#result').style.display='block';
- $('#rTitle').textContent=n>1?`${n} recorridos · ${persons.length} mentores`:`Recorrido · ${RC[0].groups.length} grupos · ${RC[0].labs.length} salones`;
+ $('#rTitle').textContent=n>1?`${n} recorridos`:`Recorrido · ${RC[0].groups.length} grupos · ${RC[0].labs.length} salones`;
  $('#allbar').style.display=n>1?'flex':'none';$('#rcs').innerHTML=RC.map((_,k)=>blockHTML(k)).join('');renderAll()}
 function blockHTML(k){const s=RC[k],multi=RC.length>1,tt=s.start?` · ${s.start} – ${s.endT}`:'',showB=multi||s.school||s.start;
- const note=s.cap!=null&&s.cap<s.avail?`<div class="info" style="margin-bottom:10px">Con el tiempo disponible solo alcanzan <b>${s.cap}</b> salones (hay ${s.avail} seleccionados): se usan los primeros ${s.cap}.</div>`:'';
+ const note=s.cap!=null&&s.cap<s.avail?`<div class="info" style="margin-bottom:10px">Con el tiempo disponible y los traslados solo alcanzan <b>${s.cap}</b> salones (hay ${s.avail}): se usan los primeros ${s.cap}.</div>`:'';
  return `<div class="rcb" id="rcb${k}">${showB?`<div class="sch"><small>RECORRIDO ${k+1}${esc(tt)}</small><b>${esc(s.school||'Sin nombre de colegio')}</b></div>`:''}${note}
  <div class="tb"><h2>Recorrido ${multi?(k+1)+' · ':''}${s.groups.length} grupos · ${s.labs.length} salones</h2><button class="btn btn-sm" onclick="exportDoc('sched','img',${k})">Imagen recorrido</button><button class="btn btn-p btn-sm" onclick="exportDoc('sched','pdf',${k})">PDF recorrido</button></div>
  <div class="tw" id="tw${k}"></div><div class="legend" id="lg${k}"></div>
  <div class="sect"><div class="tb"><h3>Roles de los mentores</h3><button class="btn btn-sm" onclick="exportDoc('roles','img',${k})">Imagen roles</button><button class="btn btn-p btn-sm" onclick="exportDoc('roles','pdf',${k})">PDF roles</button></div>
  <div id="ro${k}"></div><p class="hint">Con los botones Salón y Auditorio cambias a mano quién da cada charla.</p></div></div>`}
 function renderResult(k){useRC(k);
- if(!persons.includes(aud))aud=pick(eligible(persons));assignExtras();
+ if(!POOL.includes(aud))aud=pick(eligible(POOL));assignExtras();
  groups.forEach((g,i)=>{if(!g.includes(spk[i])){const c=g.filter(p=>p!==aud);spk[i]=pick(eligible(c.length?c:g))}});
  $('#tw'+k).innerHTML=tableHTML(false);const seen=new Set();
  $('#lg'+k).innerHTML=selLabs.map(l=>seen.has(l.id)?'':(seen.add(l.id),`<div><i style="background:${l.color}"></i>${esc(l.code)} · ${esc(l.name)}</div>`)).join('');
@@ -307,7 +334,7 @@ function tableHTML(){const map={};labs.forEach(l=>map[l.id]=l);const N=sched[0].
   h+='</tr>'});return h+'</tbody></table>'}
 const roleOf=t=>t==='BUS'?'Acompañamiento en bus y recorrido en campus':t==='CAMPUS'?'Guía de recorrido en campus':'Apoyo en el recorrido';
 let rev={},cardsP=null;
-const campusL=()=>persons.filter(p=>p.type==='CAMPUS');
+const campusL=()=>POOL.filter(p=>p.type==='CAMPUS');
 const uLabs=()=>{const z=new Set();return selLabs.filter(l=>!z.has(l.id)&&z.add(l.id))};
 const revOf=p=>uLabs().filter(l=>rev[l.id]===p).map(l=>l.code);
 function assignExtras(force){const C=campusL();if(!C.length){rev={};cardsP=null;return}
@@ -360,7 +387,7 @@ function drawHead(P,Wd,part,s,k){const isS=part==='sched',tt=s.start?(s.endT?`${
  P.rect(0,0,Wd,58,{fill:'#14100f'});P.rect(0,58,Wd,3,{fill:RD});
  P.text(isS?'Recorrido · Día UTP':'Roles de los mentores · Día UTP',24,30,{s:19,b:1,c:'#fff'});
  P.text('APP Apoyo Día UTP'+(RC.length>1?' · Recorrido '+(k+1):'')+(tt?' · '+tt:''),24,46,{s:8.5,c:'#c9a35f'});
- const info=isS?`${groups.length} grupos · ${uLabs().length} salones`:`${groups.length} grupos · ${persons.length} mentores`;
+ const info=isS?`${groups.length} grupos · ${uLabs().length} salones`:`${groups.length} grupos · ${POOL.length} mentores`;
  if(s.school){const[nm,ns]=fitT(P,s.school.toUpperCase(),Wd-48-340,15,1,8);P.text(nm,Wd-24,28,{s:ns,b:1,c:'#fff',a:'right'});P.text(info,Wd-24,46,{s:9,b:1,c:'#c9a35f',a:'right'})}
  else P.text(info,Wd-24,36,{s:9,b:1,c:'#fff',a:'right'});return 82}
 function secT(P,Wd,M,y,Hd,t){if(y+46>Hd-M){P.page();y=M}const T=t.toUpperCase();P.rrect(M,y,4,13,1.5,{fill:RD});P.text(T,M+11,y+10.5,{s:10.5,b:1,c:DR});const w=P.tw(T,10.5,1);P.rect(M+20+w,y+6,Wd-2*M-20-w,.8,{fill:'#e3d9d3'});return y+26}
