@@ -28,9 +28,9 @@ nav button.on,.sub button.on{color:#fff;background:linear-gradient(#d4191f,#6e0b
 .card::after{left:auto;right:-7px;top:auto;bottom:-7px}
 .st{font:700 13px var(--hd);letter-spacing:1.5px;text-transform:uppercase;color:var(--bronze-l);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid;border-image:linear-gradient(90deg,var(--red),transparent) 1}
 label{display:block;font:700 11px var(--hd);letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
-input[type=text],input[type=date],input[type=tel],select{width:100%;padding:11px 12px;font:16px var(--bd);color:var(--ink);background:#0d0a0a;border:2px solid var(--line);border-radius:3px;outline:none;box-shadow:inset 0 2px 6px #000}
+input[type=text],input[type=date],input[type=tel],input[type=time],input[type=number],select{width:100%;padding:11px 12px;font:16px var(--bd);color:var(--ink);background:#0d0a0a;border:2px solid var(--line);border-radius:3px;outline:none;box-shadow:inset 0 2px 6px #000}
 input:focus,select:focus{border-color:var(--red);box-shadow:inset 0 2px 6px #000,0 0 10px rgba(200,22,29,.5)}
-input[type=date]{color-scheme:dark}
+input[type=date],input[type=time]{color-scheme:dark}
 .row{display:flex;gap:8px;align-items:flex-end}.row>*{flex:1;min-width:0}
 .btn{text-align:center;line-height:1.2;min-width:0;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 16px;font:700 12px var(--hd);letter-spacing:1.2px;text-transform:uppercase;border-radius:3px;cursor:pointer;color:var(--ink);text-decoration:none;border:2px solid var(--bronze);background:linear-gradient(#3a2e2f,#1b1516);box-shadow:inset 0 1px 0 #ffffff1c,0 2px 0 #000}
 .btn:active{transform:translateY(1px)}.btn:hover{filter:brightness(1.2)}
@@ -58,7 +58,7 @@ input[type=date]{color-scheme:dark}
 table{border-collapse:collapse;font-size:12px;width:100%}
 th{background:linear-gradient(#8d1015,#4a080b);color:#fff;padding:11px 8px;font:700 11px var(--hd);letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap;border:1px solid #000}
 td{border:1px solid #000;padding:0;vertical-align:middle}
-td.gc{min-width:150px;padding:8px;background:#1d1718;position:sticky;left:0;z-index:2;box-shadow:2px 0 0 #000}th:first-child{position:sticky;left:0;z-index:3}#sched td{padding:5px;height:1px}#sched td>.ci,#sched td>.cl{height:100%;min-height:100%}.gl{font:700 9px var(--hd);letter-spacing:1.2px;color:var(--bronze-l);margin-bottom:6px}.pn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+td.gc{min-width:150px;padding:8px;background:#1d1718;position:sticky;left:0;z-index:2;box-shadow:2px 0 0 #000}th:first-child{position:sticky;left:0;z-index:3}.sched td{padding:5px;height:1px}.sched td>.ci,.sched td>.cl{height:100%;min-height:100%}.gl{font:700 9px var(--hd);letter-spacing:1.2px;color:var(--bronze-l);margin-bottom:6px}.pn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
 .pchip{display:flex;align-items:center;gap:7px;padding:8px;margin:4px 0;background:#2a2122;border:1px solid var(--line);border-left:5px solid var(--tc,var(--line));border-radius:7px;font-weight:700;font-size:13px;box-shadow:0 2px 0 #000}
 .grip{width:10px;height:14px;flex:none;color:var(--muted);background:radial-gradient(circle,currentColor 1.3px,transparent 1.7px) 0 0/5px 5px}
 .ci{position:relative;padding:10px 8px 10px 12px;min-width:118px;color:#1a1a1a;border-radius:9px;border-left:6px solid var(--bc,#000);box-shadow:0 2px 0 rgba(0,0,0,.5)}.ci .gr{position:absolute;right:6px;top:6px;width:9px;height:12px;opacity:.4;background:radial-gradient(circle,#000 1.1px,transparent 1.5px) 0 0/4.5px 4.5px}.ci b{display:block;font-size:13px}.ci span{display:block;font-size:11px;line-height:1.25}.ci em{display:block;font-size:10px;font-weight:700;opacity:.65;margin-top:3px;font-style:normal}
@@ -97,6 +97,10 @@ td.gc{min-width:150px;padding:8px;background:#1d1718;position:sticky;left:0;z-in
 .cart .foot{text-align:center;color:#a6122a;font-weight:700;font-size:13px}
 .cart.fix{width:816px;height:1054px;margin:0;border:0;padding:40px 56px;font-size:12px}
 @media(max-width:480px){td.gc{min-width:128px;padding:6px}.pchip{padding:7px 6px;gap:5px;font-size:12px}.ci{min-width:104px}.aud b{font-size:17px}.mt b{font-size:16px}.tb h2{font-size:12px}header{padding:10px 12px;gap:10px}header h1{font-size:15px;letter-spacing:1px}header small{display:none}.shield{width:38px;height:44px}nav{padding:6px;gap:4px}nav button{min-width:0;padding:9px 4px;font-size:9.5px;letter-spacing:.3px;line-height:1.15}.panel,.canvas,.wrap{padding-left:8px;padding-right:8px}.card{padding:12px}.btn{padding:10px 10px;font-size:10.5px;letter-spacing:.5px}.tb{gap:6px}.tb h2,.tb h3{font-size:13px;min-width:100%}.tb .btn{flex:1}.chip{padding:8px 9px;font-size:10px;letter-spacing:.5px}.res .rt2{flex:1 1 100%}.res .btn{flex:1 1 40%;min-width:110px}.sub button{padding:9px 8px;font-size:10px;letter-spacing:.5px}.lab,.pitem{padding:8px}.rt td,.rt th{padding:7px 6px}.mf .btn{flex:1}}
+.sch{display:flex;flex-direction:column;gap:2px;background:#000;border:2px solid var(--bronze);border-left:8px solid var(--red);border-radius:4px;padding:10px 14px;margin-bottom:12px}.sch small{font:700 10px var(--hd);letter-spacing:1.5px;color:var(--bronze-l)}.sch b{font:700 18px var(--hd);color:#fff;word-break:break-word}
+.rcb+.rcb{margin-top:40px;padding-top:26px;border-top:3px solid var(--bronze)}
+th small{display:block;font:500 9px var(--bd);letter-spacing:0;text-transform:none;opacity:.85;margin-top:2px}
+.rcfg{border:1px solid var(--line);border-radius:3px;padding:10px;margin-bottom:8px;background:#120d0e}
 .mut{color:var(--muted)}
 .aud{display:flex;flex-direction:column;gap:4px;padding:14px 16px;margin-bottom:14px;background:linear-gradient(#1a1213,#0d0a0a);border:2px solid var(--bronze);border-left:8px solid var(--red);border-radius:6px}.aud small{font:700 10px var(--hd);letter-spacing:1.5px;color:var(--bronze-l)}.aud div{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.aud b{font:700 20px var(--hd);word-break:break-word}
 .gcards,.lcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr));gap:12px}
@@ -129,6 +133,8 @@ td.gc{min-width:150px;padding:8px;background:#1d1718;position:sticky;left:0;z-in
   <div class="card"><div class="st">III · Configuración</div>
    <label>Tamaño de grupo</label>
    <div class="chips" id="gs"><div class="chip" data-n="1">Individual</div><div class="chip on" data-n="2">Parejas</div><div class="chip" data-n="3">Tríos</div><div class="chip" data-n="4">Cuarteto</div><div class="chip" data-n="5">Quinteto</div></div>
+   <div class="row" style="margin-top:14px"><div><label>Cantidad de grupos</label><select id="cfgG" onchange="preview()"><option value="">Automático</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></div><div><label>Mentores por grupo</label><select id="cfgS" onchange="preview()"><option value="">Automático</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div></div>
+   <div class="hint" style="margin-top:6px">En «Automático» se usa el tamaño de grupo de arriba.</div>
    <label style="margin-top:14px">Restricciones de grupo</label>
    <label class="ck"><input type="checkbox" id="noBusBus" checked>BUS no van juntos</label>
    <label class="ck"><input type="checkbox" id="noExtExt" checked>EXTERNO no van juntos</label>
@@ -136,15 +142,20 @@ td.gc{min-width:150px;padding:8px;background:#1d1718;position:sticky;left:0;z-in
    <label class="ck"><input type="checkbox" id="noBusTalk" checked>No sea BUS quien dé la charla</label>
    <label class="ck"><input type="checkbox" id="noExtTalk" checked>No sea EXTERNO quien dé la charla</label>
    <div class="info" id="prev" style="margin-top:10px">Añade personas para ver la distribución.</div></div>
+  <div class="card"><div class="st">IV · Recorridos del día</div>
+   <label>Cantidad de recorridos</label>
+   <select id="cfgR" onchange="renderRcfg()"><option>1</option><option>2</option><option>3</option><option>4</option></select>
+   <div id="rcfg" style="margin-top:12px"></div>
+   <div class="row"><div><label>Min. por laboratorio</label><input type="number" id="cfgMin" value="10" min="1" inputmode="numeric" oninput="rcInfo()"></div><div><label>Min. de traslado</label><input type="number" id="cfgTr" value="5" min="0" inputmode="numeric" oninput="rcInfo()"></div></div>
+   <div class="info" id="rinfo" style="margin-top:10px"></div></div>
   <button class="btn btn-p btn-full" onclick="generate()">Generar recorrido</button>
  </div>
  <div class="canvas">
   <div class="empty" id="empty">Selecciona salones, añade apoyos<br>y pulsa Generar recorrido</div>
   <div id="result" style="display:none">
-   <div class="tb"><h2 id="rTitle"></h2><button class="btn btn-sm" onclick="generate()">Regenerar</button><button class="btn btn-sm" onclick="exportDoc('sched','img')">Imagen recorrido</button><button class="btn btn-p btn-sm" onclick="exportDoc('sched','pdf')">PDF recorrido</button></div>
-   <div class="tw" id="tw"></div><div class="legend" id="legend"></div>
-   <div class="sect"><div class="tb"><h3>Roles de los mentores</h3><button class="btn btn-sm" onclick="exportDoc('roles','img')">Imagen roles</button><button class="btn btn-p btn-sm" onclick="exportDoc('roles','pdf')">PDF roles</button></div>
-    <div id="roles"></div><p class="hint">Con los botones Salón y Auditorio cambias a mano quién da cada charla.</p></div>
+   <div class="tb"><h2 id="rTitle"></h2><button class="btn btn-sm" onclick="generate()">Regenerar</button></div>
+   <div class="tb" id="allbar" style="display:none"><h3>Todos los recorridos juntos</h3><button class="btn btn-sm" onclick="exportDoc('sched','img','all')">Imagen recorridos</button><button class="btn btn-p btn-sm" onclick="exportDoc('sched','pdf','all')">PDF recorridos</button><button class="btn btn-sm" onclick="exportDoc('roles','img','all')">Imagen roles</button><button class="btn btn-p btn-sm" onclick="exportDoc('roles','pdf','all')">PDF roles</button></div>
+   <div id="rcs"></div>
   </div>
  </div>
 </div></section>
@@ -202,7 +213,7 @@ document.querySelectorAll('.sub button').forEach(b=>b.onclick=()=>{document.quer
 
 /* Datos */
 const LABS=[['a0110','Lab. Procesos Industriales','A0110','A','Piso 1','#b5d5f5'],['a0211','Arquitectura de Computadoras','A0211','A','Piso 2','#aee4d4'],['a0613','Sala Gesell','A0613','A','Piso 6','#a8d8a8'],['b0307','Sala de Audiencias','B0307','B','Piso 3','#f9d29d'],['b0610','Sala de Audiencias','B0610','B','Piso 6','#f9c784'],['b303','Design Thinking – Administración','B303','B','Piso 3','#f4c6a0'],['bss04','Lab. Mecatrónica, Robótica y CNC','BSS04','B','Sótano','#f4a7b9'],['derecho','Laboratorio de Derecho','Derecho','B','—','#d5c5e8'],['acomun','Área Común','Área Común','A/B','—','#c8c8c8'],['msuelos','Mecánica de Suelos','Mec.Suelos','B','Semisótano','#f7e79e']];
-const PPTMAP={a0110:'PPT INGENIERÍA INDUSTRIAL',a0211:'PPT INGENIERÍA DE SISTEMAS E INFORMÁTICA',a0613:'PPT PSICOLOGÍA',b0307:'PPT DERECHO',b0610:'PPT DERECHO',b303:'PPT ADMINISTRACIÓN DE EMPRESAS',derecho:'PPT DERECHO',msuelos:'PPT INGENIERÍA CIVIL'};
+const PPTMAP={a0110:'PPT INGENIERÍA INDUSTRIAL',a0211:'PPT INGENIERÍA DE SISTEMAS E INFORMÁTICA',a0613:'PPT PSICOLOGÍA',b0307:'PPT DERECHO',b0610:'PPT DERECHO',b303:'PPT ADMINISTRACIÓN DE EMPRESAS',derecho:'PPT DERECHO',msuelos:'PPT INGENIERÍA CIVIL',bss04:'PPT MECATRÓNICA'};
 let labs=LABS.map(l=>({id:l[0],name:l[1],code:l[2],tower:l[3],floor:l[4],color:l[5],selected:false,ppt:PPTMAP[l[0]]||''}));
 let persons=store.get('aud_persons',[]),gsize=2,groups=[],sched=[],selLabs=[],aud=null,spk=[];
 const MES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
@@ -219,7 +230,7 @@ function renderPersons(){
  store.set('aud_persons',persons);preview()}
 function addPerson(){const n=$('#pName').value.trim();if(!n)return;persons.push({name:n,type:$('#pType').value});$('#pName').value='';renderPersons()}
 document.querySelectorAll('#gs .chip').forEach(c=>c.onclick=()=>{document.querySelectorAll('#gs .chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');gsize=+c.dataset.n;preview()});
-function preview(){const n=persons.length;if(!n){$('#prev').textContent='Añade personas para ver la distribución.';return}const g=Math.ceil(n/gsize),b=Math.floor(n/g),e=n%g;$('#prev').textContent=`${n} personas, ${g} grupo(s). `+(e?`${g-e} de ${b} y ${e} de ${b+1}.`:`Todos de ${b}.`)}
+function preview(){const n=persons.length;if(!n){$('#prev').textContent='Añade personas para ver la distribución.';return}const z=planG(),g=z.length,tot=z.reduce((a,b)=>a+b,0),c={};z.forEach(v=>c[v]=(c[v]||0)+1);const ks=Object.keys(c),t=ks.length===1?`Todos de ${ks[0]}.`:ks.map(v=>`${c[v]} de ${v}`).join(' y ')+'.';$('#prev').textContent=`${n} personas, ${g} grupo(s). `+t+(tot<n?` Sobran ${n-tot} sin grupo.`:tot>n?` Faltan ${tot-n} personas para completar.`:'')}
 
 /* Arrastre con copia que sigue el dedo */
 let D=null,hot=null;
@@ -230,33 +241,66 @@ function endDrag(){if(!D)return;clearTimeout(D.t);if(D.g)D.g.remove();D.el.class
 document.addEventListener('pointermove',e=>{const s=D;if(!s)return;if(!s.on){if(Math.hypot(e.clientX-s.x,e.clientY-s.y)<6)return;if(s.touch){clearTimeout(s.t);D=null;return}begin(s)}
  s.g.style.left=e.clientX-s.ox+'px';s.g.style.top=e.clientY-s.oy+'px';const t=document.elementFromPoint(e.clientX,e.clientY)?.closest(s.sel);
  if(hot&&hot!==t)hot.classList.remove('hot');hot=t&&t!==s.el?t:null;if(hot)hot.classList.add('hot');
- const w=$('#tw'),r=w.getBoundingClientRect();if(s.sel.includes('#sched')&&e.clientY>r.top&&e.clientY<r.bottom){if(e.clientX>r.right-40)w.scrollLeft+=10;if(e.clientX<r.left+40)w.scrollLeft-=10}
+ const w=s.el.closest('.tw');if(w){const r=w.getBoundingClientRect();if(e.clientY>r.top&&e.clientY<r.bottom){if(e.clientX>r.right-40)w.scrollLeft+=10;if(e.clientX<r.left+40)w.scrollLeft-=10}}
  if(e.clientY>innerHeight-60)scrollBy(0,10);if(e.clientY<60)scrollBy(0,-10)});
 document.addEventListener('pointerup',()=>{if(D&&D.on&&hot){const s=D,h=hot;endDrag();s.drop(s.el,h)}else endDrag()});
 document.addEventListener('pointercancel',endDrag);
 document.addEventListener('touchmove',e=>{if(D&&D.on&&e.cancelable)e.preventDefault()},{passive:false});
 
 /* Grupos, horario y charlas */
-function buildGroups(){const nb=$('#noBusBus').checked,ne=$('#noExtExt').checked,n=persons.length,G=Math.ceil(n/gsize),b=Math.floor(n/G),e=n%G,pool=[...persons],out=[];
- for(let s=0;s<G;s++){const size=b+(s<e?1:0),grp=[];
+function planG(){const n=persons.length,gv=+$('#cfgG').value||0,sv=+$('#cfgS').value||0;let G=gv||Math.ceil(n/(sv||gsize));G=Math.max(1,Math.min(G,n||1));const z=[];
+ if(gv&&sv){for(let s=0;s<G;s++)z.push(sv)}else{const b=Math.floor(n/G),e=n%G;for(let s=0;s<G;s++)z.push(b+(s<e?1:0))}return z}
+function buildGroups(){const nb=$('#noBusBus').checked,ne=$('#noExtExt').checked,sizes=planG(),G=sizes.length,pool=[...persons],out=[];
+ for(let s=0;s<G;s++){const size=sizes[s],grp=[];
   for(let i=0;i<pool.length&&grp.length<size;i++){const c=pool[i];if(nb&&c.type==='BUS'&&grp.some(m=>m.type==='BUS'))continue;if(ne&&c.type==='EXTERNO'&&grp.some(m=>m.type==='EXTERNO'))continue;grp.push(c);pool.splice(i,1);i=-1}
-  while(grp.length<size&&pool.length)grp.push(pool.shift());out.push(grp)}return out}
+  while(grp.length<size&&pool.length)grp.push(pool.shift());if(grp.length)out.push(grp)}return out}
 function buildSched(G,L){const s=L.map(l=>l.id);while(s.length<G)s.push('LIBRE');const N=s.length;return Array.from({length:G},(_,g)=>Array.from({length:N},(_,r)=>s[(g+r)%N]))}
 function eligible(l){const nb=$('#noBusTalk').checked,ne=$('#noExtTalk').checked,f=l.filter(p=>!(nb&&p.type==='BUS')&&!(ne&&p.type==='EXTERNO'));return f.length?f:l}
 function pick(l){const w=l.map(p=>p.type==='BUS'?.25:1);let r=Math.random()*w.reduce((a,b)=>a+b,0);for(let i=0;i<l.length;i++){r-=w[i];if(r<=0)return l[i]}return l[l.length-1]}
-function generate(){selLabs=labs.filter(l=>l.selected);if(!selLabs.length)return toast('Selecciona al menos un salón');if(!persons.length)return toast('Añade al menos un apoyo');
- groups=buildGroups();sched=buildSched(groups.length,selLabs);aud=pick(eligible(persons));spk=groups.map(g=>{const c=g.filter(p=>p!==aud);return pick(eligible(c.length?c:g))});
- assignExtras(true);$('#empty').style.display='none';$('#result').style.display='block';$('#rTitle').textContent=`Recorrido · ${groups.length} grupos · ${selLabs.length} salones`;renderResult()}
-function renderResult(){
+let RC=[],K=0,TMS=null,RCF={items:[],end:''};
+function useRC(k){K=k;const s=RC[k];groups=s.groups;sched=s.sched;selLabs=s.labs;aud=s.aud;spk=s.spk;rev=s.rev;cardsP=s.cardsP;TMS=s.times}
+function saveRC(k){const s=RC[k];s.groups=groups;s.sched=sched;s.aud=aud;s.spk=spk;s.rev=rev;s.cardsP=cardsP}
+const minsOf=t=>{if(!t)return null;const p=t.split(':');return +p[0]*60+ +p[1]};
+const hhmm=m=>pad2(Math.floor(m/60)%24)+':'+pad2(m%60);
+const slug=t=>String(t).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+function rcfgSave(){const n=document.querySelectorAll('.rcfg[data-i]').length;for(let i=0;i<n;i++)RCF.items[i]={school:$('#rc_s'+i).value.trim(),start:$('#rc_t'+i).value};const e=$('#rc_end');if(e)RCF.end=e.value;rcInfo()}
+function renderRcfg(){rcfgSave();const n=+$('#cfgR').value;let h='';
+ for(let i=0;i<n;i++){const c=RCF.items[i]||{};h+=`<div class="rcfg" data-i="${i}"><label>Recorrido ${i+1} · Colegio</label><input type="text" id="rc_s${i}" placeholder="Nombre del colegio" value="${esc(c.school||'')}" oninput="rcfgSave()"><div style="margin-top:8px"><label>Hora de inicio</label><input type="time" id="rc_t${i}" value="${c.start||''}" oninput="rcfgSave()"></div></div>`}
+ h+=`<div class="rcfg"><label>Hora de término ${n>1?'del último recorrido':'del recorrido'}</label><input type="time" id="rc_end" value="${RCF.end||''}" oninput="rcfgSave()"></div>`;$('#rcfg').innerHTML=h;rcInfo()}
+function rcWin(i,n){const s=minsOf((RCF.items[i]||{}).start);if(s==null)return null;const e=i<n-1?minsOf((RCF.items[i+1]||{}).start):minsOf(RCF.end);if(e==null)return null;return{s,e,d:e-s}}
+function nLabsFor(d){const m=+$('#cfgMin').value||10,t=Math.max(0,+$('#cfgTr').value||0);return Math.floor((d+t)/(m+t))}
+function rcInfo(){const n=+$('#cfgR').value,o=[];for(let i=0;i<n;i++){const w=rcWin(i,n);o.push(`<b>Recorrido ${i+1}:</b> `+(w?(w.d>0?`${w.d} min → ${nLabsFor(w.d)} laboratorios`:'revisa las horas'):'sin horario (usa todos los salones seleccionados)'))}
+ $('#rinfo').innerHTML=o.join('<br>')+`<br><small class="mut">${+$('#cfgMin').value||10} min por laboratorio + ${Math.max(0,+$('#cfgTr').value||0)} min de traslado.</small>`}
+function generate(){rcfgSave();const sel=labs.filter(l=>l.selected);if(!sel.length)return toast('Selecciona al menos un salón');if(!persons.length)return toast('Añade al menos un apoyo');
+ const n=+$('#cfgR').value,mn=+$('#cfgMin').value||10,tr=Math.max(0,+$('#cfgTr').value||0),out=[];
+ for(let i=0;i<n;i++){const w=rcWin(i,n);let LL=sel,cap=null;
+  if(w){if(w.d<=0)return toast(`Revisa las horas del recorrido ${i+1}`);cap=nLabsFor(w.d);if(cap<1)return toast(`El recorrido ${i+1} no alcanza para un laboratorio`);if(cap<sel.length)LL=sel.slice(0,cap)}
+  selLabs=LL;groups=buildGroups();sched=buildSched(groups.length,LL);aud=pick(eligible(persons));spk=groups.map(g=>{const c=g.filter(p=>p!==aud);return pick(eligible(c.length?c:g))});rev={};cardsP=null;assignExtras(true);
+  const N=sched[0].length,times=w?Array.from({length:N},(_,r)=>{const a=w.s+r*(mn+tr);return hhmm(a)+' – '+hhmm(a+mn)}):null;
+  out.push({school:(RCF.items[i]||{}).school||'',start:w?hhmm(w.s):'',endT:w?hhmm(w.e):'',labs:LL,groups,sched,aud,spk,rev,cardsP,times,cap,avail:sel.length})}
+ RC=out;$('#empty').style.display='none';$('#result').style.display='block';
+ $('#rTitle').textContent=n>1?`${n} recorridos · ${persons.length} mentores`:`Recorrido · ${RC[0].groups.length} grupos · ${RC[0].labs.length} salones`;
+ $('#allbar').style.display=n>1?'flex':'none';$('#rcs').innerHTML=RC.map((_,k)=>blockHTML(k)).join('');renderAll()}
+function blockHTML(k){const s=RC[k],multi=RC.length>1,tt=s.start?` · ${s.start} – ${s.endT}`:'',showB=multi||s.school||s.start;
+ const note=s.cap!=null&&s.cap<s.avail?`<div class="info" style="margin-bottom:10px">Con el tiempo disponible solo alcanzan <b>${s.cap}</b> salones (hay ${s.avail} seleccionados): se usan los primeros ${s.cap}.</div>`:'';
+ return `<div class="rcb" id="rcb${k}">${showB?`<div class="sch"><small>RECORRIDO ${k+1}${esc(tt)}</small><b>${esc(s.school||'Sin nombre de colegio')}</b></div>`:''}${note}
+ <div class="tb"><h2>Recorrido ${multi?(k+1)+' · ':''}${s.groups.length} grupos · ${s.labs.length} salones</h2><button class="btn btn-sm" onclick="exportDoc('sched','img',${k})">Imagen recorrido</button><button class="btn btn-p btn-sm" onclick="exportDoc('sched','pdf',${k})">PDF recorrido</button></div>
+ <div class="tw" id="tw${k}"></div><div class="legend" id="lg${k}"></div>
+ <div class="sect"><div class="tb"><h3>Roles de los mentores</h3><button class="btn btn-sm" onclick="exportDoc('roles','img',${k})">Imagen roles</button><button class="btn btn-p btn-sm" onclick="exportDoc('roles','pdf',${k})">PDF roles</button></div>
+ <div id="ro${k}"></div><p class="hint">Con los botones Salón y Auditorio cambias a mano quién da cada charla.</p></div></div>`}
+function renderResult(k){useRC(k);
  if(!persons.includes(aud))aud=pick(eligible(persons));assignExtras();
  groups.forEach((g,i)=>{if(!g.includes(spk[i])){const c=g.filter(p=>p!==aud);spk[i]=pick(eligible(c.length?c:g))}});
- $('#tw').innerHTML=tableHTML(false);const seen=new Set();
- $('#legend').innerHTML=selLabs.map(l=>seen.has(l.id)?'':(seen.add(l.id),`<div><i style="background:${l.color}"></i>${esc(l.code)} · ${esc(l.name)}</div>`)).join('');
- $('#roles').innerHTML=rolesHTML();
- dragify('#sched .ci,#sched .cl',(a,b)=>{const[g1,r1,g2,r2]=[+a.dataset.g,+a.dataset.r,+b.dataset.g,+b.dataset.r];[sched[g1][r1],sched[g2][r2]]=[sched[g2][r2],sched[g1][r1]];renderResult()});
- dragify('#sched .pchip',(a,b)=>{const[g1,i1,g2,i2]=[+a.dataset.g,+a.dataset.i,+b.dataset.g,+b.dataset.i];[groups[g1][i1],groups[g2][i2]]=[groups[g2][i2],groups[g1][i1]];renderResult()})}
+ $('#tw'+k).innerHTML=tableHTML(false);const seen=new Set();
+ $('#lg'+k).innerHTML=selLabs.map(l=>seen.has(l.id)?'':(seen.add(l.id),`<div><i style="background:${l.color}"></i>${esc(l.code)} · ${esc(l.name)}</div>`)).join('');
+ $('#ro'+k).innerHTML=rolesHTML();
+ dragify('#tw'+k+' .ci,#tw'+k+' .cl',(a,b)=>{useRC(k);const[g1,r1,g2,r2]=[+a.dataset.g,+a.dataset.r,+b.dataset.g,+b.dataset.r];[sched[g1][r1],sched[g2][r2]]=[sched[g2][r2],sched[g1][r1]];renderResult(k)});
+ dragify('#tw'+k+' .pchip',(a,b)=>{useRC(k);const[g1,i1,g2,i2]=[+a.dataset.g,+a.dataset.i,+b.dataset.g,+b.dataset.i];[groups[g1][i1],groups[g2][i2]]=[groups[g2][i2],groups[g1][i1]];renderResult(k)});
+ saveRC(k)}
+function renderAll(){RC.forEach((_,k)=>renderResult(k))}
+function act(k,kind,gi,i){useRC(k);if(kind==='spk')spk[gi]=groups[gi][i];else aud=groups[gi][i];saveRC(k);renderResult(k)}
 function tableHTML(){const map={};labs.forEach(l=>map[l.id]=l);const N=sched[0].length;
- let h=`<table id="sched"><thead><tr><th>Grupo</th>${Array.from({length:N},(_,r)=>`<th>Ronda ${r+1}</th>`).join('')}</tr></thead><tbody>`;
+ let h=`<table class="sched"><thead><tr><th>Grupo</th>${Array.from({length:N},(_,r)=>`<th>Ronda ${r+1}${TMS?`<small>${TMS[r]}</small>`:''}</th>`).join('')}</tr></thead><tbody>`;
  groups.forEach((grp,g)=>{h+=`<tr><td class="gc"><div class="gl">GRUPO ${g+1}</div>${grp.map((p,i)=>`<div class="pchip" data-g="${g}" data-i="${i}" style="--tc:${COL[p.type.toLowerCase()]}"><span class="grip"></span><span class="pn">${esc(p.name)}</span><span class="badge b-${p.type.toLowerCase()}">${p.type}</span></div>`).join('')}</td>`;
   for(let r=0;r<N;r++){const id=sched[g][r],at=`data-g="${g}" data-r="${r}"`;
    if(id==='LIBRE')h+=`<td><div class="cl" ${at}>libre</div></td>`;else{const l=map[id];h+=`<td><div class="ci" ${at} style="background:${l.color};--bc:${shade(l.color,-.4)}"><i class="gr"></i><b>${esc(l.code)}</b><span>${esc(l.name)}</span><em>Torre ${esc(l.tower)} · ${esc(l.floor)}</em></div></td>`}}
@@ -271,17 +315,17 @@ function assignExtras(force){const C=campusL();if(!C.length){rev={};cardsP=null;
  const pool=C.length>1?C.filter(p=>p!==cardsP):C,st=Math.floor(Math.random()*pool.length);
  uLabs().forEach((l,i)=>{if(force||!C.includes(rev[l.id]))rev[l.id]=pool[(st+i)%pool.length]})}
 const pptNames=()=>['','PPT CIERRE',...PPTS.map(r=>r.t)];
-function setPpt(id,v){labs.find(l=>l.id===id).ppt=v;renderResult()}
-function setRev(id,i){rev[id]=campusL()[+i];renderResult()}
-function setCards(i){cardsP=campusL()[+i];renderResult()}
+function setPpt(k,id,v){labs.find(l=>l.id===id).ppt=v;renderAll()}
+function setRev(k,id,i){useRC(k);rev[id]=campusL()[+i];saveRC(k);renderResult(k)}
+function setCards(k,i){useRC(k);cardsP=campusL()[+i];saveRC(k);renderResult(k)}
 function rolesHTML(){const a=groups.flat().includes(aud)?aud:null,C=campusL();
  let h=`<div class="aud"><small>CHARLA DE CIERRE DIA UTP - AUDITORIO</small><div><b>${a?esc(a.name):'—'}</b>${a?`<span class="badge b-${a.type.toLowerCase()}">${a.type}</span>`:''}</div></div>`;
  h+=`<div class="gcards">${groups.map((g,gi)=>`<div class="gcard"><div class="gh"><span>GRUPO ${gi+1}</span><small>${g.length} ${g.length>1?'mentores':'mentor'}</small></div>${g.map((p,i)=>{const rv=revOf(p),tk=(p===aud?'<span class="talk k">CHARLA DE CIERRE DIA UTP - AUDITORIO</span>':'')+(p===spk[gi]?'<span class="talk">CHARLA DE CIERRE DIA UTP - SALÓN</span>':'')+(p===cardsP?'<span class="talk a">ARMAR CARDS Y TRAER FICHAS</span>':'')+(rv.length?`<span class="talk g">REVISA PPT: ${esc(rv.join(', '))}</span>`:'');
-  return `<div class="mr"><div class="mt"><b>${esc(p.name)}</b><span class="badge b-${p.type.toLowerCase()}">${p.type}</span></div><div class="mrole">${roleOf(p.type)}</div><div class="tags">${tk}</div><div class="mact"><span>Dar charla de cierre:</span><button class="mini" onclick="spk[${gi}]=groups[${gi}][${i}];renderResult()">Salón</button><button class="mini" onclick="aud=groups[${gi}][${i}];renderResult()">Auditorio</button></div></div>`}).join('')}</div>`).join('')}</div>`;
+  return `<div class="mr"><div class="mt"><b>${esc(p.name)}</b><span class="badge b-${p.type.toLowerCase()}">${p.type}</span></div><div class="mrole">${roleOf(p.type)}</div><div class="tags">${tk}</div><div class="mact"><span>Dar charla de cierre:</span><button class="mini" onclick="act(${K},'spk',${gi},${i})">Salón</button><button class="mini" onclick="act(${K},'aud',${gi},${i})">Auditorio</button></div></div>`}).join('')}</div>`).join('')}</div>`;
  h+='<div class="tb" style="margin:26px 0 10px"><h3>PPT por salón</h3></div>';
  if(!C.length)h+='<div class="info" style="margin-bottom:10px">Añade al menos un mentor CAMPUS para asignar la revisión de PPT y las cards.</div>';
- h+=`<div class="lcards">${uLabs().map(l=>`<div class="lc"><div class="lh" style="background:${l.color}"><b>${esc(l.code)}</b><span>${esc(l.name)}</span></div><div class="lb"><div><label>PPT que le corresponde</label><select onchange="setPpt('${l.id}',this.value)">${pptNames().map(n=>`<option value="${esc(n)}" ${l.ppt===n?'selected':''}>${n?esc(n):'Por definir'}</option>`).join('')}</select></div><div><label>Revisa (CAMPUS)</label>${C.length?`<select onchange="setRev('${l.id}',this.value)">${C.map((p,i)=>`<option value="${i}" ${rev[l.id]===p?'selected':''}>${esc(p.name)}</option>`).join('')}</select>`:'<small class="mut">Sin mentor CAMPUS</small>'}</div></div></div>`).join('')}</div>`;
- if(C.length)h+=`<div class="cardsbox"><div><label>Armar cards y traer fichas</label><p>Preparar antes de empezar el día las cards (tarjetas que se entregan al finalizar el recorrido).</p></div><select onchange="setCards(this.value)">${C.map((p,i)=>`<option value="${i}" ${cardsP===p?'selected':''}>${esc(p.name)}</option>`).join('')}</select></div>`;
+ h+=`<div class="lcards">${uLabs().map(l=>`<div class="lc"><div class="lh" style="background:${l.color}"><b>${esc(l.code)}</b><span>${esc(l.name)}</span></div><div class="lb"><div><label>PPT que le corresponde</label><select onchange="setPpt(${K},'${l.id}',this.value)">${pptNames().map(n=>`<option value="${esc(n)}" ${l.ppt===n?'selected':''}>${n?esc(n):'Por definir'}</option>`).join('')}</select></div><div><label>Revisa (CAMPUS)</label>${C.length?`<select onchange="setRev(${K},'${l.id}',this.value)">${C.map((p,i)=>`<option value="${i}" ${rev[l.id]===p?'selected':''}>${esc(p.name)}</option>`).join('')}</select>`:'<small class="mut">Sin mentor CAMPUS</small>'}</div></div></div>`).join('')}</div>`;
+ if(C.length)h+=`<div class="cardsbox"><div><label>Armar cards y traer fichas</label><p>Preparar antes de empezar el día las cards (tarjetas que se entregan al finalizar el recorrido).</p></div><select onchange="setCards(${K},this.value)">${C.map((p,i)=>`<option value="${i}" ${cardsP===p?'selected':''}>${esc(p.name)}</option>`).join('')}</select></div>`;
  return h}
 
 /* PDF */
@@ -312,11 +356,16 @@ function wrapT(P,t,w,s,b){const o=[];let cur='';String(t).split(/\s+/).forEach(w
 function fitS(P,t,w,s,b,min){while(s>min&&P.tw(t,s,b)>w)s-=.25;return s}
 function fitT(P,t,w,s,b,min){s=fitS(P,t,w,s,b,min);if(P.tw(t,s,b)<=w)return[t,s];while(t.length>1&&P.tw(t+'...',s,b)>w)t=t.slice(0,-1);return[t+'...',s]}
 function pill(P,x,y,h,t,s,fill,c,right){const w=P.tw(t,s,1)+h*.9,xx=right?x-w:x;P.rrect(xx,y,w,h,h/2,{fill});P.text(t,xx+w/2,y+h/2+s*.35,{s,b:1,c,a:'center'});return w}
-function drawHead(P,Wd,part){const isS=part==='sched';P.rect(0,0,Wd,58,{fill:'#14100f'});P.rect(0,58,Wd,3,{fill:RD});P.text(isS?'Recorrido · Día UTP':'Roles de los mentores · Día UTP',24,30,{s:19,b:1,c:'#fff'});P.text('APP Apoyo Día UTP',24,46,{s:8.5,c:'#c9a35f'});
- P.text(isS?`${groups.length} grupos · ${uLabs().length} salones`:`${groups.length} grupos · ${persons.length} mentores`,Wd-24,36,{s:9,b:1,c:'#fff',a:'right'});return 82}
+function drawHead(P,Wd,part,s,k){const isS=part==='sched',tt=s.start?(s.endT?`${s.start} – ${s.endT}`:s.start):'';
+ P.rect(0,0,Wd,58,{fill:'#14100f'});P.rect(0,58,Wd,3,{fill:RD});
+ P.text(isS?'Recorrido · Día UTP':'Roles de los mentores · Día UTP',24,30,{s:19,b:1,c:'#fff'});
+ P.text('APP Apoyo Día UTP'+(RC.length>1?' · Recorrido '+(k+1):'')+(tt?' · '+tt:''),24,46,{s:8.5,c:'#c9a35f'});
+ const info=isS?`${groups.length} grupos · ${uLabs().length} salones`:`${groups.length} grupos · ${persons.length} mentores`;
+ if(s.school){const[nm,ns]=fitT(P,s.school.toUpperCase(),Wd-48-340,15,1,8);P.text(nm,Wd-24,28,{s:ns,b:1,c:'#fff',a:'right'});P.text(info,Wd-24,46,{s:9,b:1,c:'#c9a35f',a:'right'})}
+ else P.text(info,Wd-24,36,{s:9,b:1,c:'#fff',a:'right'});return 82}
 function secT(P,Wd,M,y,Hd,t){if(y+46>Hd-M){P.page();y=M}const T=t.toUpperCase();P.rrect(M,y,4,13,1.5,{fill:RD});P.text(T,M+11,y+10.5,{s:10.5,b:1,c:DR});const w=P.tw(T,10.5,1);P.rect(M+20+w,y+6,Wd-2*M-20-w,.8,{fill:'#e3d9d3'});return y+26}
 function drawSchedule(P,Wd,Hd,y,M){const N=sched[0].length,gw=132,cw=(Wd-2*M-gw)/N,fs=Math.max(6.5,Math.min(9,cw/8.5)),map={};labs.forEach(l=>map[l.id]=l);
- const hdr=()=>{P.rrect(M,y,gw-3,22,5,{fill:DR});P.text('GRUPO',M+(gw-3)/2,y+14.5,{s:8,b:1,c:'#fff',a:'center'});for(let r=0;r<N;r++){const x=M+gw+r*cw;P.rrect(x+1.5,y,cw-3,22,5,{fill:DR});P.text('RONDA '+(r+1),x+cw/2,y+14.5,{s:8,b:1,c:'#fff',a:'center'})}y+=28};hdr();
+ const HH=TMS?30:22,hdr=()=>{P.rrect(M,y,gw-3,HH,5,{fill:DR});P.text('GRUPO',M+(gw-3)/2,y+(TMS?18:14.5),{s:8,b:1,c:'#fff',a:'center'});for(let r=0;r<N;r++){const x=M+gw+r*cw;P.rrect(x+1.5,y,cw-3,HH,5,{fill:DR});if(TMS){P.text('RONDA '+(r+1),x+cw/2,y+12,{s:8,b:1,c:'#fff',a:'center'});P.text(TMS[r],x+cw/2,y+23,{s:Math.min(7,cw/9),c:'#f3d7d9',a:'center'})}else P.text('RONDA '+(r+1),x+cw/2,y+14.5,{s:8,b:1,c:'#fff',a:'center'})}y+=HH+6};hdr();
  groups.forEach((grp,g)=>{const cs=fs+1,chipH=cs*1.3+9,gh=24+grp.length*(chipH+4),tiles=[];let th=0;
   for(let r=0;r<N;r++){const id=sched[g][r];if(id==='LIBRE'){tiles.push(null);continue}const l=map[id],nm=wrapT(P,l.name,cw-3-18,fs-.5,0);th=Math.max(th,18+(fs+1)*1.3+nm.length*(fs-.5)*1.3+(fs-1.5)*1.3);tiles.push({l,nm})}
   const rh=Math.max(gh,th+6);if(y+rh>Hd-M){P.page();y=M;hdr()}
@@ -352,15 +401,21 @@ function drawRoles(P,Wd,Hd,y,M){const TW=Wd-2*M,gap=12;
  if(cardsP){y=secT(P,Wd,M,y,Hd,'Armar cards y traer fichas');const d=wrapT(P,'Preparar antes de empezar el día las cards (tarjetas que se entregan al finalizar el recorrido).',TW-40,8.5,0),h=34+d.length*11;if(y+h>Hd-M){P.page();y=M}
   P.rrect(M,y,TW,h,8,{fill:'#fff6d6',stroke:'#f2b705',lw:1});P.rrect(M,y,6,h,3,{fill:'#f2b705'});P.text(cardsP.name,M+18,y+20,{s:13,b:1,c:'#3a2a00'});pill(P,M+TW-12,y+8,15,'CAMPUS',7.5,COL.campus,'#fff',1);d.forEach((t,k)=>P.text(t,M+18,y+35+k*11,{s:8.5,c:'#5a4400'}));y+=h+10}
  return y}
-/* Un documento por parte: 'sched' = recorrido, 'roles' = asignación de roles */
-function drawPart(P,Wd,Hd,part){const M=24;let y=drawHead(P,Wd,part);y=part==='sched'?drawSchedule(P,Wd,Hd,y,M):drawRoles(P,Wd,Hd,y,M);return y+M}
-function exportDoc(part,fmt){if(!groups.length)return;
- const Wd=part==='sched'?Math.max(792,48+132+sched[0].length*84):792,Hd=Wd*612/792,name=part==='sched'?'Recorrido-Dia-UTP':'Roles-Mentores-Dia-UTP';
+/* Un documento por parte y por recorrido: part 'sched' = recorrido, 'roles' = roles. k = número de recorrido o 'all' (todos juntos) */
+function drawPart(P,Wd,Hd,part,s,k){const M=24;let y=drawHead(P,Wd,part,s,k);y=part==='sched'?drawSchedule(P,Wd,Hd,y,M):drawRoles(P,Wd,Hd,y,M);return y+M}
+function shiftP(P,dy){return{tw:P.tw,rect:(x,y,w,h,o)=>P.rect(x,y+dy,w,h,o),rrect:(x,y,w,h,r,o)=>P.rrect(x,y+dy,w,h,r,o),text:(t,x,y,o)=>P.text(t,x,y+dy,o),page:P.page}}
+function exportDoc(part,fmt,k){if(!RC.length)return;const all=k==='all',ks=all?RC.map((_,i)=>i):[+k];
+ const Wd=Math.max(...ks.map(kk=>{useRC(kk);return part==='sched'?Math.max(792,48+132+sched[0].length*84):792})),Hd=Wd*612/792;
+ const base=part==='sched'?'Recorrido-Dia-UTP':'Roles-Mentores-Dia-UTP',sn=RC[ks[0]].school,name=all?base+'-Todos-los-recorridos':base+(sn?'-'+slug(sn):RC.length>1?'-Recorrido-'+(ks[0]+1):'');
  if(fmt==='pdf'){const J=window.jspdf&&window.jspdf.jsPDF;if(!J)return toast('No se pudo cargar el generador de PDF');
-  const doc=new J({unit:'pt',format:[Wd,Hd],orientation:'landscape'});drawPart(painterPDF(doc,Wd,Hd),Wd,Hd,part);deliver(doc.output('blob'),name+'.pdf')}
+  const doc=new J({unit:'pt',format:[Wd,Hd],orientation:'landscape'});
+  ks.forEach((kk,i)=>{useRC(kk);if(i)doc.addPage([Wd,Hd],'l');drawPart(painterPDF(doc,Wd,Hd),Wd,Hd,part,RC[kk],kk)});
+  deliver(doc.output('blob'),name+'.pdf')}
  else{const nop={...painterCV(document.createElement('canvas').getContext('2d')),rect(){},rrect(){},text(){},page(){}};
-  const H=Math.ceil(drawPart(nop,Wd,1e9,part)),k=2,cv=document.createElement('canvas');cv.width=Wd*k;cv.height=H*k;const ctx=cv.getContext('2d');ctx.scale(k,k);ctx.fillStyle='#fff';ctx.fillRect(0,0,Wd,H);
-  drawPart(painterCV(ctx),Wd,1e9,part);cv.toBlob(b=>deliver(b,name+'.png'),'image/png')}}
+  const hs=ks.map(kk=>{useRC(kk);return Math.ceil(drawPart(nop,Wd,1e9,part,RC[kk],kk))}),gap=18,Ht=hs.reduce((a,b)=>a+b,0)+gap*(ks.length-1),kf=2,cv=document.createElement('canvas');
+  cv.width=Wd*kf;cv.height=Ht*kf;const ctx=cv.getContext('2d');ctx.scale(kf,kf);ctx.fillStyle='#fff';ctx.fillRect(0,0,Wd,Ht);
+  let off=0;ks.forEach((kk,i)=>{useRC(kk);drawPart(shiftP(painterCV(ctx),off),Wd,1e9,part,RC[kk],kk);off+=hs[i]+gap});
+  cv.toBlob(b=>deliver(b,name+'.png'),'image/png')}}
 
 /* Declaración Jurada: réplica fiel del Word (carta, Verdana/Tahoma 10 pt, 2 páginas) */
 const DJCSS=`.pg{width:816px;height:1054px;padding:50px 112px 0;background:#fff;color:#000;font:11pt/1.45 Helvetica,Arial,sans-serif;text-align:justify;box-sizing:border-box}.pg p{margin:0}.pg .t{font-weight:700}.pg .it{display:flex;margin-top:22px}.pg .it>i{width:34px;flex:none;font-style:normal}.pg .it>div{flex:1}.pg .bl p{text-align:left;padding-left:9px;text-indent:-9px;margin-bottom:2px}.pg .sg{margin-top:22px}.pg u{text-decoration:underline}`;
@@ -467,12 +522,12 @@ function pdfCart(){const d=document.createElement('div');d.style.cssText='width:
 const GS=id=>({v:`https://docs.google.com/presentation/d/${id}/edit?usp=sharing`,d:`https://drive.google.com/uc?export=download&id=${id}`});
 const GF=id=>({v:`https://drive.google.com/file/d/${id}/view?usp=sharing`,d:`https://drive.google.com/uc?export=download&id=${id}`});
 const VIDS=[{t:'VIDEO ÁREA SALUD',k:'Video',...GF('1iyFZ_KDuEhNFUr6lfZmAv7HYg9-yXbir')},{t:'VIDEO DOMINA EL CAMBIO',k:'Video',...GF('1pryoZvwLtvbEawJwq1KzQ1z32BTUBSsr')},{t:'PPT CIERRE',k:'Presentación',...GS('1TKBWZ8LjLgxNZSl6B5H77YXfN0YhYXoJ')}];
-const PPTS=[['ADMINISTRACIÓN DE EMPRESAS','1PiuSO4cUvwjIhtde6VwFIW8j-2_ovjiL'],['ARQUITECTURA','1_-6TlEGoy2NkD0-WVtZLRl2p9SGRI7J3'],['CIENCIAS DE LA COMUNICACIÓN','1y0B--f2AxfmZigBhKpvoPXSBYslVXTk_'],['CONTABILIDAD','1I_HRSw7CAshAQSzXjAbWDhGwBxMHF2MU'],['DERECHO','1ZuZYNAs35G38DH23YikHktVE2014bB0X'],['ECONOMÍA','1nMY8_qiNyJM9hBD4blGdEZcvyXWOUd8X'],['EDUCACIÓN INICIAL','1Tqgrhh_d7uqlRLQGT2Bm6noECza_Ktme'],['ENFERMERÍA','1MqXg7oYk7nTvbhDA4XmtkrA8bIHGjD3t'],['FARMACIA','1adiEP3MbItic0Ksclz5xPRYlvDPpUK7-'],['INGENIERÍA AMBIENTAL','1s8sG149Kd4RiGDYS739T53Gy0rHQVovT'],['INGENIERÍA CIVIL','1G_N7sbNGWM2fgnYW5skCLUMbf11O8TLO'],['INGENIERÍA INDUSTRIAL','10QhGlMB1BOgTFYQYFIU18Vvi60QnwoXE'],['INGENIERÍA DE SISTEMAS E INFORMÁTICA','10_WYf-GmuhpeFZ1V8ucBRhuferKR17zb'],['MARKETING','1FpN5Qqg_VcFgNM_rLbAm0bMRffpjVVIR'],['MEDICINA','12d4QcEH-e-5yM6IF8euC8KqAKezNXVBa'],['NEGOCIOS INTERNACIONALES','1oGXnIhMlCLFkLWyOaZrXusBjPZe2XLZR'],['NUTRICIÓN','1o3S2frxBSomuxA_cVoY8NIHLJxCTMLYE'],['OBSTETRICIA','1_WgsIb2YwDs6PFOqYp1ePTM0-ykqWbmV'],['PSICOLOGÍA','1eSKV5ECCfTvD3a-qnA03mnn-0mNzuPj1'],['TERAPIA FÍSICA','1RPQmM9JWk5F7kH69kroJUZQOZ3vaVB19']].map(([n,id])=>({t:'PPT '+n,k:'Presentación',...GS(id)}));
+const PPTS=[['ADMINISTRACIÓN DE EMPRESAS','1PiuSO4cUvwjIhtde6VwFIW8j-2_ovjiL'],['ARQUITECTURA','1_-6TlEGoy2NkD0-WVtZLRl2p9SGRI7J3'],['CIENCIAS DE LA COMUNICACIÓN','1y0B--f2AxfmZigBhKpvoPXSBYslVXTk_'],['CONTABILIDAD','1I_HRSw7CAshAQSzXjAbWDhGwBxMHF2MU'],['DERECHO','1ZuZYNAs35G38DH23YikHktVE2014bB0X'],['ECONOMÍA','1nMY8_qiNyJM9hBD4blGdEZcvyXWOUd8X'],['EDUCACIÓN INICIAL','1Tqgrhh_d7uqlRLQGT2Bm6noECza_Ktme'],['ENFERMERÍA','1MqXg7oYk7nTvbhDA4XmtkrA8bIHGjD3t'],['FARMACIA','1adiEP3MbItic0Ksclz5xPRYlvDPpUK7-'],['INGENIERÍA AMBIENTAL','1s8sG149Kd4RiGDYS739T53Gy0rHQVovT'],['INGENIERÍA CIVIL','1G_N7sbNGWM2fgnYW5skCLUMbf11O8TLO'],['INGENIERÍA INDUSTRIAL','10QhGlMB1BOgTFYQYFIU18Vvi60QnwoXE'],['INGENIERÍA DE SISTEMAS E INFORMÁTICA','10_WYf-GmuhpeFZ1V8ucBRhuferKR17zb'],['MARKETING','1FpN5Qqg_VcFgNM_rLbAm0bMRffpjVVIR'],['MECATRÓNICA','1KyNOYeS5ArW1RC16cPDuBZUwTz5GYpyQ'],['MEDICINA','12d4QcEH-e-5yM6IF8euC8KqAKezNXVBa'],['NEGOCIOS INTERNACIONALES','1oGXnIhMlCLFkLWyOaZrXusBjPZe2XLZR'],['NUTRICIÓN','1o3S2frxBSomuxA_cVoY8NIHLJxCTMLYE'],['OBSTETRICIA','1_WgsIb2YwDs6PFOqYp1ePTM0-ykqWbmV'],['PSICOLOGÍA','1eSKV5ECCfTvD3a-qnA03mnn-0mNzuPj1'],['TERAPIA FÍSICA','1RPQmM9JWk5F7kH69kroJUZQOZ3vaVB19']].map(([n,id])=>({t:'PPT '+n,k:'Presentación',...GS(id)}));
 function resHTML(a){return a.map(r=>{const ok=!!r.v,at=u=>ok?`href="${u}" target="_blank" rel="noopener noreferrer"`:'aria-disabled="true"';
  return `<div class="res ${ok?'':'pend'}"><div class="rt2"><span class="tag">${r.k}${ok?'':' · Pendiente de publicar'}</span><b>${esc(r.t)}</b></div><a class="btn btn-p btn-sm" ${at(r.v)}>Visualizar</a><a class="btn btn-sm" ${at(r.d)}>Descargar</a></div>`}).join('')}
 $('#resVid').innerHTML=resHTML(VIDS);$('#resPpt').innerHTML=resHTML(PPTS);$('#cartView').innerHTML=cartHTML(false);
 
-renderLabs();renderPersons();djPrev();
+renderLabs();renderPersons();renderRcfg();djPrev();
 </script>
 </body>
 </html>
